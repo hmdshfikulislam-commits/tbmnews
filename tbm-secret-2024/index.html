@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>অ্যাডমিন প্যানেল | TBM NEWS BD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!--
+  MIT License
+  Copyright (c) 2026 MD. HEDAET SHAHRIAR HIMON
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  Data: HedaetShahriar/bangladesh-locations-dataset, data/bd_locations.json (version 1.5.0, MIT).
+  -->
+  <script>window.TBM_UPAZILAS_BY_DISTRICT = {"কুমিল্লা":{"upazilas":["বরুড়া","ব্রাহ্মণপাড়া","বুড়িচং","চান্দিনা","চৌদ্দগ্রাম","কুমিল্লা সদর","দাউদকান্দি","দেবিদ্বার","হোমনা","লাকসাম","লালমাই","মেঘনা","মনোহরগঞ্জ","মুরাদনগর","নাঙ্গলকোট","সদর দক্ষিণ","তিতাস","বাঙ্গরা"],"thanas":[]},"ফেনী":{"upazilas":["ছাগলনাইয়া","দাগনভূঞা","ফেনী সদর","ফুলগাজী","পরশুরাম","সোনাগাজী"],"thanas":[]},"ব্রাহ্মণবাড়িয়া":{"upazilas":["আখাউড়া","আশুগঞ্জ","বাঞ্ছারামপুর","বিজয়নগর","ব্রাহ্মণবাড়িয়া সদর","কসবা","নবীনগর","নাসিরনগর","সরাইল"],"thanas":[]},"রাঙামাটি":{"upazilas":["বাঘাইছড়ি","বরকল","বিলাইছড়ি","জুরাছড়ি","কাপ্তাই","কাউখালী","লংগদু","নানিয়ারচর","রাজস্থলী","রাঙ্গামাটি সদর"],"thanas":[]},"নোয়াখালী":{"upazilas":["বেগমগঞ্জ","চাটখিল","কোম্পানীগঞ্জ","হাতিয়া","কবিরহাট","নোয়াখালী সদর","সেনবাগ","সোনাইমুড়ী","সুবর্ণচর"],"thanas":[]},"চাঁদপুর":{"upazilas":["হাইমচর","কচুয়া","শাহরাস্তি","চাঁদপুর সদর","মতলব দক্ষিণ","হাজীগঞ্জ","মতলব উত্তর","ফরিদগঞ্জ"],"thanas":[]},"লক্ষ্মীপুর":{"upazilas":["কমলনগর","লক্ষ্মীপুর সদর","রায়পুর","রামগঞ্জ","রামগতি","চন্দ্রগন্জ"],"thanas":[]},"চট্টগ্রাম":{"upazilas":["রাঙ্গুনিয়া","সীতাকুন্ড","মীরসরাই","পটিয়া","সন্দ্বীপ","বাঁশখালী","বোয়ালখালী","আনোয়ারা","চন্দনাইশ","সাতকানিয়া","লোহাগাড়া","হাটহাজারী","ফটিকছড়ি","রাউজান","কর্ণফুলী"],"thanas":["কোতোয়ালী","ডবলমুরিং","পাহাড়তলী","পাঁচলাইশ","খুলশী","হালিশহর","চান্দগাঁও","বাকলিয়া","বায়েজিদ বোস্তামী","পতেঙ্গা","চট্টগ্রাম বন্দর","জোরারগঞ্জ","আকবর শাহ","ইপিজেড"]},"কক্সবাজার":{"upazilas":["চকরিয়া","কক্সবাজার সদর","ঈদগাঁও","কুতুবদিয়া","মহেশখালী","পেকুয়া","রামু","টেকনাফ","উখিয়া","মাতামুহুরী"],"thanas":[]},"খাগড়াছড়ি":{"upazilas":["দিঘীনালা","গুইমারা","খাগড়াছড়ি সদর","লক্ষীছড়ি","মানিকছড়ি","মাটিরাঙ্গা","মহালছড়ি","পানছড়ি","রামগড়"],"thanas":[]},"বান্দরবান":{"upazilas":["বান্দরবান সদর","আলীকদম","নাইক্ষ্যংছড়ি","রোয়াংছড়ি","লামা","রুমা","থানচি"],"thanas":[]},"সিরাজগঞ্জ":{"upazilas":["বেলকুচি","চৌহালি","কামারখন্দ","কাজীপুর","রায়গঞ্জ","শাহজাদপুর","সিরাজগঞ্জ সদর","তাড়াশ","উল্লাপাড়া"],"thanas":[]},"পাবনা":{"upazilas":["আটঘরিয়া","বেড়া","ভাঙ্গুড়া","চাটমোহর","ফরিদপুর","ঈশ্বরদী","পাবনা সদর","সাঁথিয়া","সুজানগর"],"thanas":[]},"বগুড়া":{"upazilas":["আদমদিঘি","বগুড়া সদর","ধুনট","দুপচাচিঁয়া","গাবতলী","কাহালু","নন্দিগ্রাম","শাজাহানপুর","সারিয়াকান্দি","শেরপুর","শিবগঞ্জ","সোনাতলা","মোকামতলা"],"thanas":[]},"রাজশাহী":{"upazilas":["পবা","দুর্গাপুর","মোহনপুর","চারঘাট","পুঠিয়া","বাঘা","গোদাগাড়ী","তানোর","বাগমারা"],"thanas":["বোয়ালিয়া","মতিহার","রাজপাড়া","শাহ মখদুম"]},"নাটোর":{"upazilas":["বাগাতিপাড়া","বড়াইগ্রাম","গুরুদাসপুর","লালপুর","নলডাঙ্গা","নাটোর সদর","সিংড়া"],"thanas":[]},"জয়পুরহাট":{"upazilas":["আক্কেলপুর","জয়পুরহাট সদর","কালাই","ক্ষেতলাল","পাঁচবিবি"],"thanas":[]},"চাঁপাইনবাবগঞ্জ":{"upazilas":["ভোলাহাট","চাঁপাইনবাবগঞ্জ সদর","গোমস্তাপুর","নাচোল","শিবগঞ্জ"],"thanas":[]},"নওগাঁ":{"upazilas":["মহাদেবপুর","বদলগাছী","পত্নিতলা","ধামইরহাট","নিয়ামতপুর","মান্দা","আত্রাই","রাণীনগর","নওগাঁ সদর","পোরশা","সাপাহার"],"thanas":[]},"যশোর":{"upazilas":["অভয়নগর","বাঘারপাড়া","চৌগাছা","যশোর সদর","ঝিকরগাছা","কেশবপুর","মণিরামপুর","শার্শা"],"thanas":[]},"সাতক্ষীরা":{"upazilas":["আশাশুনি","দেবহাটা","কলারোয়া","কালিগঞ্জ","সাতক্ষীরা সদর","শ্যামনগর","তালা"],"thanas":[]},"মেহেরপুর":{"upazilas":["গাংনী","মেহেরপুর সদর","মুজিবনগর"],"thanas":[]},"নড়াইল":{"upazilas":["কালিয়া","লোহাগড়া","নড়াইল সদর"],"thanas":[]},"চুয়াডাঙ্গা":{"upazilas":["আলমডাঙ্গা","চুয়াডাঙ্গা সদর","দামুড়হুদা","জীবননগর"],"thanas":[]},"কুষ্টিয়া":{"upazilas":["ভেড়ামারা","দৌলতপুর","খোকসা","কুমারখালী","কুষ্টিয়া সদর","মিরপুর"],"thanas":[]},"মাগুরা":{"upazilas":["মাগুরা সদর","মহম্মদপুর","শালিখা","শ্রীপুর"],"thanas":[]},"খুলনা":{"upazilas":["পাইকগাছা","ফুলতলা","দিঘলিয়া","রূপসা","তেরখাদা","ডুমুরিয়া","বটিয়াঘাটা","দাকোপ","কয়রা"],"thanas":["খুলনা সদর","খালিশপুর","সোনাডাঙ্গা","খানজাহান আলী","দৌলতপুর"]},"বাগেরহাট":{"upazilas":["বাগেরহাট সদর","চিতলমারী","ফকিরহাট","কচুয়া","মোল্লাহাট","মোংলা","মোড়েলগঞ্জ","রামপাল","শরণখোলা"],"thanas":[]},"ঝিনাইদহ":{"upazilas":["হরিণাকুন্ডু","ঝিনাইদহ সদর","কালীগঞ্জ","কোটচাঁদপুর","মহেশপুর","শৈলকুপা"],"thanas":[]},"ঝালকাঠি":{"upazilas":["ঝালকাঠি সদর","কাঠালিয়া","নলছিটি","রাজাপুর"],"thanas":[]},"পটুয়াখালী":{"upazilas":["বাউফল","পটুয়াখালী সদর","দুমকি","দশমিনা","কলাপাড়া","মির্জাগঞ্জ","গলাচিপা","রাঙ্গাবালী"],"thanas":[]},"পিরোজপুর":{"upazilas":["পিরোজপুর সদর","নাজিরপুর","কাউখালী","জিয়ানগর","ভান্ডারিয়া","মঠবাড়ীয়া","নেছারাবাদ","ইন্দুরকানী"],"thanas":[]},"বরিশাল":{"upazilas":["বরিশাল সদর","বাকেরগঞ্জ","বাবুগঞ্জ","উজিরপুর","বানারীপাড়া","গৌরনদী","আগৈলঝাড়া","মেহেন্দিগঞ্জ","মুলাদী","হিজলা"],"thanas":["কোতোয়ালী"]},"ভোলা":{"upazilas":["ভোলা সদর","বোরহান উদ্দিন","চরফ্যাশন","দৌলতখান","মনপুরা","তজুমদ্দিন","লালমোহন"],"thanas":[]},"বরগুনা":{"upazilas":["আমতলী","বরগুনা সদর","বেতাগী","বামনা","পাথরঘাটা","তালতলি"],"thanas":[]},"হবিগঞ্জ":{"upazilas":["আজমিরীগঞ্জ","বাহুবল","বানিয়াচং","চুনারুঘাট","হবিগঞ্জ সদর","লাখাই","মাধবপুর","নবীগঞ্জ"],"thanas":[]},"মৌলভীবাজার":{"upazilas":["বড়লেখা","জুড়ী","কমলগঞ্জ","কুলাউড়া","মৌলভীবাজার সদর","রাজনগর","শ্রীমঙ্গল"],"thanas":[]},"সুনামগঞ্জ":{"upazilas":["বিশ্বম্ভরপুর","ছাতক","দিরাই","ধর্মপাশা","দোয়ারাবাজার","জগন্নাথপুর","জামালগঞ্জ","মধ্যনগর","শাল্লা","দক্ষিণ সুনামগঞ্জ","সুনামগঞ্জ সদর","তাহিরপুর"],"thanas":[]},"সিলেট":{"upazilas":["বালাগঞ্জ","বিয়ানীবাজার","বিশ্বনাথ","কোম্পানীগঞ্জ","ফেঞ্চুগঞ্জ","গোলাপগঞ্জ","গোয়াইনঘাট","জৈন্তাপুর","কানাইঘাট","সিলেট সদর","জকিগঞ্জ","দক্ষিণ সুরমা","ওসমানী নগর"],"thanas":["জিন্দাবাজার","জালালাবাদ"]},"নরসিংদী":{"upazilas":["বেলাবো","মনোহরদী","নরসিংদী সদর","পলাশ","রায়পুরা","শিবপুর"],"thanas":[]},"গাজীপুর":{"upazilas":["কালীগঞ্জ","কালিয়াকৈর","কাপাসিয়া","গাজীপুর সদর","শ্রীপুর"],"thanas":["টঙ্গী"]},"শরীয়তপুর":{"upazilas":["ভেদরগঞ্জ","ডামুড্যা","গোসাইরহাট","নড়িয়া","শরিয়তপুর সদর","জাজিরা"],"thanas":[]},"নারায়ণগঞ্জ":{"upazilas":["আড়াইহাজার","বন্দর","নারায়নগঞ্জ সদর","রূপগঞ্জ","সোনারগাঁ"],"thanas":["ফতুল্লা","সিদ্ধিরগঞ্জ","বাইদ্দের বাজার"]},"টাঙ্গাইল":{"upazilas":["বাসাইল","ভুয়াপুর","দেলদুয়ার","ধনবাড়ী","ঘাটাইল","গোপালপুর","কালিহাতী","মধুপুর","মির্জাপুর","নাগরপুর","সখিপুর","টাঙ্গাইল সদর"],"thanas":[]},"কিশোরগঞ্জ":{"upazilas":["অষ্টগ্রাম","বাজিতপুর","ভৈরব","হোসেনপুর","ইটনা","করিমগঞ্জ","কটিয়াদী","কিশোরগঞ্জ সদর","কুলিয়ারচর","মিঠামইন","নিকলী","পাকুন্দিয়া","তাড়াইল"],"thanas":[]},"মানিকগঞ্জ":{"upazilas":["দৌলতপুর","ঘিওর","হরিরামপুর","মানিকগঞ্জ সদর","সাটুরিয়া","শিবালয়","সিংগাইর"],"thanas":[]},"ঢাকা":{"upazilas":["সাভার","ধামরাই","কেরাণীগঞ্জ","নবাবগঞ্জ","দোহার"],"thanas":["আদাবর","বাড্ডা","বংশাল","বিমানবন্দর","ঢাকা সেনানিবাস","চকবাজার","দক্ষিণখান","দারুস সালাম","ডেমরা","ধানমন্ডি","গেন্ডারিয়া","গুলশান","হাজারীবাগ","যাত্রাবাড়ী","কদমতলী","কাফরুল","কলাবাগান","কামরাঙ্গীরচর","খিলগাঁও","খিলক্ষেত","কোতোয়ালী","লালবাগ","মিরপুর","মোহাম্মদপুর","মতিঝিল","নিউমার্কেট","পল্লবী","পল্টন","রমনা","রামপুরা","সবুজবাগ","শাহ আলী","শাহবাগ","শের এ বাংলা নগর","শ্যামপুর","সূত্রাপুর","তেজগাঁও","তেজগাঁও শিল্প এলাকা","তুরাগ","উত্তরখান","উত্তরা","আশুলিয়া","শাহজাহানপুর"]},"মুন্সিগঞ্জ":{"upazilas":["গজারিয়া","লৌহজং","মুন্সিগঞ্জ সদর","সিরাজদিখান","শ্রীনগর","টংগীবাড়ি"],"thanas":[]},"রাজবাড়ী":{"upazilas":["বালিয়াকান্দি","গোয়ালন্দ","কালুখালী","পাংশা","রাজবাড়ী সদর"],"thanas":[]},"মাদারীপুর":{"upazilas":["ডাসার","কালকিনি","মাদারীপুর সদর","রাজৈর","শিবচর"],"thanas":[]},"গোপালগঞ্জ":{"upazilas":["গোপালগঞ্জ সদর","কাশিয়ানী","কোটালীপাড়া","মুকসুদপুর","টুংগীপাড়া"],"thanas":[]},"ফরিদপুর":{"upazilas":["আলফাডাঙ্গা","ভাঙ্গা","বোয়ালমারী","চরভদ্রাসন","ফরিদপুর সদর","মধুখালী","নগরকান্দা","সদরপুর","সালথা"],"thanas":[]},"পঞ্চগড়":{"upazilas":["আটোয়ারী","বোদা","দেবীগঞ্জ","পঞ্চগড় সদর","তেতুলিয়া"],"thanas":[]},"দিনাজপুর":{"upazilas":["বিরামপুর","বীরগঞ্জ","বিরল","বোচাগঞ্জ","চিরিরবন্দর","দিনাজপুর সদর","ফুলবাড়ী","ঘোড়াঘাট","হাকিমপুর","কাহারোল","খানসামা","নবাবগঞ্জ","পার্বতীপুর"],"thanas":[]},"লালমনিরহাট":{"upazilas":["আদিতমারী","হাতীবান্ধা","কালীগঞ্জ","লালমনিরহাট সদর","পাটগ্রাম"],"thanas":[]},"নীলফামারী":{"upazilas":["ডিমলা","ডোমার","জলঢাকা","কিশোরগঞ্জ","নীলফামারী সদর","সৈয়দপুর"],"thanas":[]},"গাইবান্ধা":{"upazilas":["গাইবান্ধা সদর","গোবিন্দগঞ্জ","পলাশবাড়ী","ফুলছড়ি","সাদুল্লাপুর","সাঘাটা","সুন্দরগঞ্জ"],"thanas":[]},"ঠাকুরগাঁও":{"upazilas":["বালিয়াডাঙ্গী","হরিপুর","পীরগঞ্জ","রাণীশংকৈল","ঠাকুরগাঁও সদর","রুহিয়া","ভূল্লী"],"thanas":[]},"রংপুর":{"upazilas":["রংপুর সদর","গংগাচড়া","তারাগঞ্জ","বদরগঞ্জ","মিঠাপুকুর","পীরগঞ্জ","কাউনিয়া","পীরগাছা"],"thanas":["কোতোয়ালী"]},"কুড়িগ্রাম":{"upazilas":["কুড়িগ্রাম সদর","নাগেশ্বরী","ভুরুঙ্গামারী","ফুলবাড়ী","রাজারহাট","উলিপুর","চিলমারী","রৌমারী","চর রাজিবপুর"],"thanas":[]},"শেরপুর":{"upazilas":["ঝিনাইগাতী","নালিতাবাড়ী","নকলা","শেরপুর সদর","শ্রীবরদী"],"thanas":[]},"ময়মনসিংহ":{"upazilas":["ভালুকা","ধোবাউড়া","ফুলবাড়ীয়া","গফরগাঁও","গৌরীপুর","হালুয়াঘাট","ঈশ্বরগঞ্জ","মুক্তাগাছা","ময়মনসিংহ সদর","নান্দাইল","ফুলপুর","তারাকান্দা","ত্রিশাল","দক্ষিণ গফরগাঁও"],"thanas":[]},"জামালপুর":{"upazilas":["বকশীগঞ্জ","দেওয়ানগঞ্জ","ইসলামপুর","জামালপুর সদর","মাদারগঞ্জ","মেলান্দহ","সরিষাবাড়ী"],"thanas":[]},"নেত্রকোণা":{"upazilas":["বারহাট্টা","দুর্গাপুর","কেন্দুয়া","আটপাড়া","মদন","খালিয়াজুরী","কলমাকান্দা","মোহনগঞ্জ","পূর্বধলা","নেত্রকোণা সদর"],"thanas":[]}};</script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172b36;
+      --muted: #71838a;
+      --teal: #087f73;
+      --teal-dark: #075e57;
+      --line: #e7eeeb;
+      --paper: #f5f8f6;
+    }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; background: var(--paper); color: var(--ink); font-family: "Hind Siliguri", sans-serif; }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .ambient {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+      background: radial-gradient(ellipse at 12% 14%, rgba(99, 200, 173, .16), transparent 34%),
+                  radial-gradient(ellipse at 88% 6%, rgba(255, 200, 139, .2), transparent 31%),
+                  linear-gradient(145deg, #f8fbf8, #f1f6f4 55%, #f8f7f1);
+    }
+    .ambient::before, .ambient::after {
+      position: absolute; content: ""; width: 27rem; height: 27rem; border-radius: 50%;
+      filter: blur(75px); opacity: .48; animation: drift 17s ease-in-out infinite alternate;
+    }
+    .ambient::before { left: -12rem; top: 27%; background: rgba(71, 190, 161, .22); }
+    .ambient::after { right: -11rem; top: -12rem; background: rgba(245, 182, 119, .22); animation-delay: -8s; }
+    .login-backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: #102a2c; }
+    .login-backdrop::before, .login-backdrop::after {
+      position: absolute; width: 32rem; height: 32rem; border-radius: 50%; content: "";
+      filter: blur(95px); opacity: .7; animation: drift 16s ease-in-out infinite alternate;
+    }
+    .login-backdrop::before { left: -10rem; top: -13rem; background: rgba(147, 51, 234, .5); }
+    .login-backdrop::after { right: -9rem; bottom: -17rem; background: rgba(217, 70, 239, .4); animation-delay: -7s; }
+    @keyframes drift { to { transform: translate3d(45px, 28px, 0) scale(1.12); } }
+    .login-card { box-shadow: 0 32px 100px rgba(7, 30, 32, .2); }
+    .login-brand-panel { background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 55%, #c026d3 100%); }
+    .brand-mark { display: grid; width: 54px; height: 54px; flex: 0 0 auto; place-items: center; overflow: hidden; border: 1px solid rgba(16, 42, 44, .08); border-radius: 16px; background: #fff; padding: 5px; }
+    .brand-mark img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: center; }
+    .dashboard-layout { display: grid; min-height: 100vh; grid-template-columns: 250px minmax(0, 1fr); }
+    .sidebar { position: sticky; top: 0; display: flex; height: 100vh; flex-direction: column; border-right: 1px solid rgba(255,255,255,.08); background: linear-gradient(165deg, #4c1d95 0%, #581c87 58%, #312e81 100%); color: white; }
+    .sidebar-link { display: flex; min-height: 46px; align-items: center; gap: 12px; border-radius: 12px; padding: 10px 12px; color: #c6d5d1; font-size: 14px; font-weight: 600; transition: .2s ease; }
+    .sidebar-link:hover, .sidebar-link.active { background: rgba(255,255,255,.1); color: #fff; }
+    .sidebar-link.active { box-shadow: inset 3px 0 #6ed3b1; }
+    .sidebar-link svg { width: 19px; height: 19px; flex: 0 0 auto; }
+    .main-column { min-width: 0; }
+    .topbar { position: sticky; top: 0; z-index: 20; display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid rgba(225,235,231,.9); background: rgba(255,255,255,.8); padding: 12px clamp(16px, 3vw, 36px); backdrop-filter: blur(18px); }
+    .surface { border: 1px solid rgba(225,235,231,.95); border-radius: 20px; background: rgba(255,255,255,.92); box-shadow: 0 12px 36px rgba(27, 63, 55, .045); }
+    .hero-panel { position: relative; overflow: hidden; border-radius: 24px; background: linear-gradient(116deg, #104b46 0%, #147c6e 58%, #289b7d 100%); color: #fff; }
+    .hero-panel::after { position: absolute; right: -72px; top: -170px; width: 390px; height: 390px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; box-shadow: 0 0 0 42px rgba(255,255,255,.035), 0 0 0 88px rgba(255,255,255,.025); content: ""; pointer-events: none; }
+    .form-control { width: 100%; min-width: 0; border: 1px solid #dfe8e4; border-radius: 12px; background: #fbfdfc; padding: 12px 14px; color: var(--ink); outline: none; transition: border-color .18s, box-shadow .18s, background .18s; }
+    .form-control:focus { border-color: #37a98d; background: #fff; box-shadow: 0 0 0 4px rgba(55,169,141,.12); }
+    .form-control::placeholder { color: #a0aeaa; }
+    .primary-button { border: 0; border-radius: 12px; background: var(--teal); color: white; font-weight: 700; transition: .2s ease; }
+    .primary-button:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .primary-button:disabled { cursor: wait; opacity: .65; transform: none; }
+    .notice { border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.7; }
+    .notice-error { background: #fff0ed; color: #a43b2d; }
+    .notice-success { background: #eaf8f1; color: #176745; }
+    .news-scrollbar { scrollbar-color: #c9d9d2 transparent; scrollbar-width: thin; }
+    @media (max-width: 900px) {
+      .dashboard-layout { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { position: relative; height: auto; min-height: 0; min-width: 0; }
+      .sidebar-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px !important; }
+      .sidebar-nav { display: flex; min-width: 0; gap: 6px; overflow-x: auto; padding: 0 14px 12px !important; }
+      .sidebar-nav .sidebar-link { min-width: max-content; }
+      .sidebar-nav .sidebar-link.active { box-shadow: inset 0 -2px #6ed3b1; }
+      .sidebar-bottom { display: none; }
+    }
+    @media (max-width: 520px) {
+      .topbar { min-height: 66px; }
+      .surface { border-radius: 16px; }
+      .hero-panel { border-radius: 19px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <div class="ambient" aria-hidden="true"></div>
+  <div id="loginView" class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+    <div class="login-backdrop" aria-hidden="true"></div>
+    <div class="login-card relative grid w-full max-w-5xl overflow-hidden rounded-[28px] bg-white md:grid-cols-[1.02fr_.98fr]">
+      <section class="login-brand-panel relative flex min-h-[520px] flex-col justify-between overflow-hidden p-8 text-white sm:p-11">
+        <div class="absolute -right-24 -top-24 h-80 w-80 rounded-full border border-white/10 shadow-[0_0_0_40px_rgba(255,255,255,.035),0_0_0_82px_rgba(255,255,255,.025)]"></div>
+        <a href="../index.html" class="relative flex w-fit items-center gap-3">
+          <span class="brand-mark"><img src="../logo.png" alt="TBM NEWS BD লোগো"></span>
+          <span><span class="block text-lg font-bold leading-tight">TBM NEWS BD</span><span class="text-xs text-white/65">ন্যায়ের কথা বলি এবং লিখি</span></span>
+        </a>
+        <div class="relative my-12">
+          <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-emerald-100"><span class="h-1.5 w-1.5 rounded-full bg-emerald-300"></span> সম্পাদকীয় নিয়ন্ত্রণকক্ষ</span>
+          <h1 class="mt-6 max-w-md text-4xl font-bold leading-[1.22] text-white sm:text-5xl">ন্যায়ের কথা<br><span class="text-white">বলি এবং লিখি</span></h1>
+          <p class="mt-5 max-w-sm text-sm leading-7 text-white/90">আপনার সংবাদ তৈরি, সম্পাদনা ও প্রকাশনার প্রতিটি ধাপ—এখন এক নিরাপদ, সহজ জায়গায়।</p>
+        </div>
+        <p class="relative text-xs text-white/45">© ২০২৬ TBM NEWS BD · সম্পাদকীয় ডেস্ক</p>
+      </section>
+      <section class="flex flex-col justify-center p-7 sm:p-11 lg:p-14">
+        <a href="../index.html" class="mb-9 flex w-fit items-center gap-3 md:hidden">
+          <span class="brand-mark"><img src="../logo.png" alt="TBM NEWS BD লোগো"></span>
+          <span><span class="block font-bold text-[#153b38]">TBM NEWS BD</span><span class="text-xs text-slate-500">সম্পাদকীয় ডেস্ক</span></span>
+        </a>
+        <p class="text-sm font-bold tracking-wide text-[#087f73]">স্বাগতম</p>
+        <h2 class="mt-1 text-3xl font-bold tracking-tight text-[#172b36]">অ্যাডমিনে প্রবেশ</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-500">অনুমোদিত অ্যাডমিনের 2FA কোড দিয়ে প্রবেশ করুন।</p>
+        <form id="loginForm" class="mt-8 space-y-5">
+          <label class="block text-sm font-semibold text-slate-700">অনুমোদিত Gmail
+            <input id="email" name="email" type="email" value="hmdshfikulislam@gmail.com" readonly autocomplete="username" class="form-control mt-2">
+          </label>
+          <label class="block text-sm font-semibold text-slate-700">৬ সংখ্যার 2FA কোড
+            <input id="totp" name="totp" type="text" required inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" placeholder="Authenticator-এর কোড লিখুন" class="form-control mt-2 tracking-[.35em]">
+            <span class="mt-1 block text-xs font-normal text-slate-500">Google Authenticator বা সমর্থিত অ্যাপে প্রতি ৩০ সেকেন্ডে কোড বদলায়।</span>
+          </label>
+          <button id="loginButton" type="submit" class="primary-button w-full px-4 py-3.5 shadow-lg shadow-emerald-900/10">সাইন ইন করুন <span aria-hidden="true">→</span></button>
+        </form>
+        <p id="loginError" role="alert" class="notice notice-error mt-4 hidden"></p>
+        <a href="../index.html" class="mt-7 inline-flex w-fit items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#087f73]"><span aria-hidden="true">←</span> নিউজ পোর্টালে ফিরে যান</a>
+      </section>
+    </div>
+  </div>
+
+  <div id="adminView" class="hidden min-h-screen">
+    <div class="dashboard-layout">
+      <aside class="sidebar">
+        <div class="sidebar-top px-5 py-6">
+          <a href="../index.html" class="flex min-w-0 items-center gap-3">
+            <span class="brand-mark h-12 w-12 rounded-[14px]"><img src="../logo.png" alt="TBM NEWS BD লোগো"></span>
+            <span class="min-w-0"><span class="block truncate text-sm font-bold">TBM NEWS BD</span><span class="block text-xs text-white/55">সম্পাদকীয় ডেস্ক</span></span>
+          </a>
+          <span class="hidden rounded-full bg-emerald-300/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200 max-[900px]:inline-flex">অ্যাডমিন</span>
+        </div>
+        <div class="mx-5 border-t border-white/10 max-[900px]:hidden"></div>
+        <nav class="sidebar-nav flex-1 space-y-1 px-3 py-5" aria-label="অ্যাডমিন নেভিগেশন">
+          <p class="px-3 pb-2 pt-1 text-[10px] font-bold tracking-[.18em] text-white/35">ওয়ার্কস্পেস</p>
+          <a href="#dashboard" class="sidebar-link active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg> ড্যাশবোর্ড</a>
+          <a href="#newsForm" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg> নতুন সংবাদ লিখুন</a>
+          <a href="#publishedNews" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5h14a1.5 1.5 0 0 1 1.5 1.5v13a1 1 0 0 1-1.5.9L12 16l-7 3.9a1 1 0 0 1-1.5-.9V6A1.5 1.5 0 0 1 5 4.5Z"/><path d="M8 8h8M8 11h8"/></svg> প্রকাশিত সংবাদ</a>
+          <p class="px-3 pb-2 pt-7 text-[10px] font-bold tracking-[.18em] text-white/35">ওয়েবসাইট</p>
+          <a href="../index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7"/></svg> নিউজ পোর্টাল দেখুন <span class="ml-auto" aria-hidden="true">↗</span></a>
+        </nav>
+        <div class="sidebar-bottom m-4 mt-auto rounded-2xl border border-white/10 bg-white/[.06] p-4">
+          <div class="flex items-center gap-2 text-xs font-semibold text-emerald-100"><span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-50"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-300"></span></span> প্রকাশনা কেন্দ্র সচল</div>
+          <p class="mt-2 text-xs leading-5 text-white/45">আপনার সংবাদ এখন পাঠকের কাছে পৌঁছাতে প্রস্তুত।</p>
+        </div>
+      </aside>
+      <div class="main-column">
+        <header class="topbar">
+          <div><p class="text-xs font-medium text-slate-400">TBM NEWS BD <span class="px-1">/</span> অ্যাডমিন</p><h1 class="text-lg font-bold leading-tight sm:text-xl">ড্যাশবোর্ড</h1></div>
+          <div class="flex items-center gap-2 sm:gap-3">
+            <a href="../index.html" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-emerald-300 hover:text-[#087f73] sm:px-4 sm:text-sm"><span aria-hidden="true">↗</span><span class="hidden sm:inline">সাইট দেখুন</span><span class="sm:hidden">সাইট</span></a>
+            <div class="hidden h-8 w-px bg-slate-200 sm:block"></div>
+            <div class="hidden text-right sm:block"><p id="signedInEmail" class="max-w-44 truncate text-xs font-bold text-slate-700">অ্যাডমিন</p><p class="text-[11px] text-slate-400">সাইন ইন করা আছে</p></div>
+            <button id="logoutButton" type="button" class="rounded-xl bg-[#153b38] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[#0e302e] sm:px-4 sm:text-sm">লগআউট</button>
+          </div>
+        </header>
+        <main id="dashboard" class="mx-auto w-full max-w-[1500px] px-4 py-6 sm:px-6 sm:py-8 xl:px-10">
+          <section class="hero-panel mb-6 p-5 sm:mb-7 sm:p-8">
+            <div class="relative z-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+              <div class="max-w-xl"><p class="text-xs font-semibold tracking-wide text-emerald-100/80">আপনার নিউজরুম, এক জায়গায়</p><h2 class="mt-1 text-2xl font-bold sm:text-3xl">প্রকাশনা কেন্দ্র</h2><p class="mt-2 text-sm leading-6 text-white/75">নতুন প্রতিবেদন লিখুন, ছবি যোগ করুন এবং প্রকাশিত সংবাদ পরিচালনা করুন।</p></div>
+              <div class="flex w-fit items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-xl" aria-hidden="true">✍</span><span><span class="block text-xs text-white/65">আজকের সম্পাদক</span><span class="block max-w-52 truncate text-sm font-bold" id="heroSignedInEmail">অ্যাডমিন</span></span></div>
+            </div>
+          </section>
+          <div class="mb-6 grid gap-4 sm:grid-cols-2">
+            <section class="surface flex items-center gap-4 p-4 sm:p-5"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-xl text-[#087f73]" aria-hidden="true">▤</span><span><span class="block text-xs font-medium text-slate-500">সাম্প্রতিক প্রকাশনা</span><span class="mt-0.5 block text-2xl font-bold text-[#172b36]" id="newsTotal">0</span></span><span class="ml-auto rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">সর্বশেষ ৩০টি</span></section>
+            <section class="surface flex items-center gap-4 p-4 sm:p-5"><span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-xl text-amber-700" aria-hidden="true">◷</span><span><span class="block text-xs font-medium text-slate-500">প্রকাশনা অবস্থা</span><span class="mt-0.5 block text-lg font-bold text-[#172b36]">সম্পাদকীয় ডেস্ক সক্রিয়</span></span><span class="ml-auto flex items-center gap-2 text-xs font-semibold text-emerald-700"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> প্রস্তুত</span></section>
+          </div>
+          <div class="grid items-start gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(310px,.85fr)]">
+            <section id="createNews" class="surface min-w-0 overflow-hidden">
+              <div class="flex items-center gap-3 border-b border-[#edf2ef] px-5 py-5 sm:px-7">
+                <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-xl font-semibold text-[#087f73]" aria-hidden="true">＋</span>
+                <div><h2 class="text-lg font-bold sm:text-xl">নতুন সংবাদ তৈরি করুন</h2><p class="mt-0.5 text-xs text-slate-500 sm:text-sm">তারকা (*) চিহ্নিত ঘরগুলো পূরণ করুন</p></div>
+              </div>
+              <form id="newsForm" class="space-y-5 p-5 sm:p-7">
+                <label class="block text-sm font-semibold text-slate-700">সংবাদের শিরোনাম <span class="text-[#087f73]">*</span><input id="title" name="title" maxlength="180" required placeholder="সংবাদের স্পষ্ট ও আকর্ষণীয় শিরোনাম লিখুন" class="form-control mt-2"></label>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <label class="block text-sm font-semibold text-slate-700">সংবাদের বিভাগ <span class="text-[#087f73]">*</span><select id="category" name="category" required class="form-control mt-2"><option value="">বিভাগ নির্বাচন করুন</option><option>জাতীয়</option><option>রাজনীতি</option><option>আন্তর্জাতিক</option><option>অর্থনীতি</option><option>বিনোদন</option><option>খেলাধুলা</option><option>শিক্ষা</option><option>স্বাস্থ্য</option><option>প্রযুক্তি</option><option>ইসলামিক</option><option>আবহাওয়া</option><optgroup label="অপরাধ"><option>দুর্নীতি</option><option>চাঁদাবাজি</option><option>লুটপাট</option><option>ধর্ষণ</option></optgroup><optgroup label="অঞ্চল"><option>ঢাকা</option><option>চট্টগ্রাম</option><option>বরিশাল</option><option>রাজশাহী</option><option>খুলনা</option><option>সিলেট</option><option>রংপুর</option><option>ময়মনসিংহ</option></optgroup></select></label>
+                  <div class="grid grid-cols-2 gap-3"><label class="block text-sm font-semibold text-slate-700">জেলা<select id="district" name="district" class="form-control mt-2"><option value="">জেলা নির্বাচন করুন</option><optgroup label="ঢাকা বিভাগ"><option>ঢাকা</option><option>ফরিদপুর</option><option>গাজীপুর</option><option>গোপালগঞ্জ</option><option>কিশোরগঞ্জ</option><option>মাদারীপুর</option><option>মানিকগঞ্জ</option><option>মুন্সিগঞ্জ</option><option>নারায়ণগঞ্জ</option><option>নরসিংদী</option><option>রাজবাড়ী</option><option>শরীয়তপুর</option><option>টাঙ্গাইল</option></optgroup><optgroup label="চট্টগ্রাম বিভাগ"><option>বান্দরবান</option><option>ব্রাহ্মণবাড়িয়া</option><option>চাঁদপুর</option><option>চট্টগ্রাম</option><option>কুমিল্লা</option><option>কক্সবাজার</option><option>ফেনী</option><option>খাগড়াছড়ি</option><option>লক্ষ্মীপুর</option><option>নোয়াখালী</option><option>রাঙামাটি</option></optgroup><optgroup label="রাজশাহী বিভাগ"><option>বগুড়া</option><option>জয়পুরহাট</option><option>নওগাঁ</option><option>নাটোর</option><option>চাঁপাইনবাবগঞ্জ</option><option>পাবনা</option><option>রাজশাহী</option><option>সিরাজগঞ্জ</option></optgroup><optgroup label="খুলনা বিভাগ"><option>বাগেরহাট</option><option>চুয়াডাঙ্গা</option><option>যশোর</option><option>ঝিনাইদহ</option><option>খুলনা</option><option>কুষ্টিয়া</option><option>মাগুরা</option><option>মেহেরপুর</option><option>নড়াইল</option><option>সাতক্ষীরা</option></optgroup><optgroup label="বরিশাল বিভাগ"><option>বরগুনা</option><option>বরিশাল</option><option>ভোলা</option><option>ঝালকাঠি</option><option>পটুয়াখালী</option><option>পিরোজপুর</option></optgroup><optgroup label="সিলেট বিভাগ"><option>হবিগঞ্জ</option><option>মৌলভীবাজার</option><option>সুনামগঞ্জ</option><option>সিলেট</option></optgroup><optgroup label="রংপুর বিভাগ"><option>দিনাজপুর</option><option>গাইবান্ধা</option><option>কুড়িগ্রাম</option><option>লালমনিরহাট</option><option>নীলফামারী</option><option>পঞ্চগড়</option><option>রংপুর</option><option>ঠাকুরগাঁও</option></optgroup><optgroup label="ময়মনসিংহ বিভাগ"><option>জামালপুর</option><option>ময়মনসিংহ</option><option>নেত্রকোণা</option><option>শেরপুর</option></optgroup></select></label><label class="block text-sm font-semibold text-slate-700">থানা / উপজেলা<select id="upazila" name="upazila" disabled class="form-control mt-2 disabled:cursor-not-allowed disabled:bg-slate-100"><option value="">আগে জেলা নির্বাচন করুন</option></select></label></div>
+                </div>
+                <label class="block text-sm font-semibold text-slate-700">সংবাদের বিস্তারিত <span class="text-[#087f73]">*</span><textarea id="description" name="description" rows="8" required placeholder="সংবাদের সম্পূর্ণ বিবরণ এখানে লিখুন..." class="form-control mt-2 resize-y leading-7"></textarea></label>
+                <div class="rounded-2xl border border-dashed border-[#d8e5df] bg-[#f8fbf9] p-4 sm:p-5">
+                  <div class="flex items-center justify-between gap-3"><div><h3 class="text-sm font-bold text-slate-800">সংবাদের ছবি</h3><p class="mt-0.5 text-xs text-slate-500">ছবি আপলোড করুন অথবা ছবির লিংক দিন</p></div><span class="text-lg text-[#087f73]" aria-hidden="true">▧</span></div>
+                  <div class="mt-3 grid gap-3 sm:grid-cols-2"><label class="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#dfe8e4] bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-400 hover:text-[#087f73]"><span aria-hidden="true">＋</span> ডিভাইস থেকে ছবি বাছুন<input id="imageFile" type="file" accept="image/*" class="sr-only"></label><input id="imageUrl" type="url" placeholder="ছবির URL · https://" class="form-control bg-white text-sm"></div>
+                  <div id="previewWrap" class="mt-4 hidden rounded-xl border border-slate-200 bg-white p-3"><img id="preview" alt="সংবাদের ছবির প্রিভিউ" class="max-h-64 w-full rounded-lg bg-slate-50 object-contain"><button id="removeImage" type="button" class="mt-3 text-xs font-semibold text-rose-700 transition hover:text-rose-900">ছবি সরিয়ে দিন</button></div>
+                  <p id="uploadStatus" class="mt-2 hidden text-xs font-semibold"></p>
+                </div>
+                <div id="livePreview" class="rounded-2xl border border-[#e4ece8] bg-white p-4 sm:p-5"><div class="flex items-center justify-between gap-2"><p class="text-[10px] font-bold tracking-[.16em] text-slate-400">সংবাদ প্রিভিউ</p><span class="rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-[#087f73]">লাইভ</span></div><p id="previewCategory" class="mt-3 text-xs font-bold text-[#087f73]">বিভাগ নির্বাচন করুন</p><h3 id="previewTitle" class="mt-1 text-lg font-bold leading-snug text-[#172b36]">আপনার শিরোনাম এখানে দেখা যাবে</h3><p id="previewDescription" class="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">বিস্তারিত লিখলে এখানে সংবাদটির প্রিভিউ দেখা যাবে।</p></div>
+                <p id="formMessage" role="status" class="hidden"></p>
+                <div class="flex gap-3">
+                  <button id="publishButton" type="submit" class="primary-button flex min-w-0 flex-1 items-center justify-center gap-2 px-5 py-3.5 shadow-lg shadow-emerald-900/10"><span>সংবাদ প্রকাশ করুন</span><span aria-hidden="true">→</span></button>
+                  <button id="cancelEditButton" type="button" class="hidden rounded-xl border border-slate-200 bg-white px-5 py-3.5 font-semibold text-slate-600 transition hover:bg-slate-50">বাতিল</button>
+                </div>
+              </form>
+            </section>
+            <aside id="publishedNews" class="surface min-w-0 overflow-hidden xl:sticky xl:top-[94px]">
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#edf2ef] px-5 py-5"><div><div class="flex items-center gap-2"><span class="relative flex h-2 w-2"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span></span><h2 class="text-base font-bold sm:text-lg">প্রকাশিত সংবাদ</h2></div><p id="listStatus" class="mt-1 text-xs text-slate-500">সংবাদ লোড হচ্ছে…</p></div><div class="flex items-center gap-2"><button id="addDemoNews" type="button" class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800 transition hover:bg-amber-100">৬টি ডেমো নিউজ যোগ করুন</button><span class="rounded-lg bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold text-[#087f73]">সাম্প্রতিক</span></div></div>
+              <div id="newsList" class="news-scrollbar max-h-[68vh] space-y-3 overflow-y-auto p-4"></div>
+            </aside>
+          </div>
+          <footer class="py-7 text-center text-xs text-slate-400">© ২০২৬ TBM NEWS BD · দায়িত্বশীল সংবাদ প্রকাশে অঙ্গীকারবদ্ধ</footer>
+        </main>
+      </div>
+    </div>
+  </div>
+
+<script>
+const loginView = document.getElementById("loginView");
+const adminView = document.getElementById("adminView");
+const loginForm = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+const emailInput = document.getElementById("email");
+const totpInput = document.getElementById("totp");
+const loginError = document.getElementById("loginError");
+const newsForm = document.getElementById("newsForm");
+const publishButton = document.getElementById("publishButton");
+const cancelEditButton = document.getElementById("cancelEditButton");
+const formMessage = document.getElementById("formMessage");
+const districtSelect = document.getElementById("district");
+const upazilaSelect = document.getElementById("upazila");
+const imageFile = document.getElementById("imageFile");
+const imageUrl = document.getElementById("imageUrl");
+const preview = document.getElementById("preview");
+const previewWrap = document.getElementById("previewWrap");
+const uploadStatus = document.getElementById("uploadStatus");
+const newsList = document.getElementById("newsList");
+const listStatus = document.getElementById("listStatus");
+const newsTotal = document.getElementById("newsTotal");
+let selectedImage = "";
+let selectedObjectUrl = "";
+let editingNewsId = "";
+let currentNewsById = new Map();
+let sessionHeartbeat = 0;
+let lastActivity = Date.now();
+let lastHeartbeatActivity = 0;
+function escapeHtml(value){return String(value??"").replace(/[&<>"']/g, char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);}
+function showMessage(element, message, isError){element.textContent=message; element.className=`notice ${isError?"notice-error":"notice-success"}`;}
+async function requestAdminApi(method, body){
+  if(Date.now()-lastActivity>=30*60*1000){
+    const message="৩০ মিনিট নিষ্ক্রিয় থাকায় আপনাকে লগআউট করা হয়েছে।";
+    await endAdminSession(message);
+    throw new Error(message);
+  }
+  const response=await fetch("/api/admin/news",{
+    method,
+    headers:body?{"Content-Type":"application/json"}:{},
+    credentials:"same-origin",
+    cache:"no-store",
+    ...(body?{body:JSON.stringify(body)}:{})
+  });
+  let result;
+  try{result=await response.json();}
+  catch(error){throw new Error(`সার্ভার থেকে সঠিক উত্তর পাওয়া যায়নি: ${error.message}`);}
+  if(response.status===401){
+    showLogin(result.error||"সেশনের মেয়াদ শেষ হয়েছে। আবার লগইন করুন।");
+    throw new Error(result.error||"অনুমতি নেই।");
+  }
+  if(!response.ok) throw new Error(result.error||"অনুরোধটি সম্পন্ন করা যায়নি।");
+  return result;
+}
+function showImage(source, label){preview.src=source; previewWrap.classList.remove("hidden"); uploadStatus.textContent=label; uploadStatus.className="mt-2 text-xs font-semibold text-emerald-700"; uploadStatus.classList.remove("hidden");}
+function clearImage(){if(selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl=""; selectedImage=""; imageFile.value=""; imageUrl.value=""; preview.removeAttribute("src"); previewWrap.classList.add("hidden"); uploadStatus.classList.add("hidden");}
+function updatePreview(){document.getElementById("previewCategory").textContent=document.getElementById("category").value||"বিভাগ নির্বাচন করুন"; document.getElementById("previewTitle").textContent=document.getElementById("title").value.trim()||"আপনার শিরোনাম এখানে দেখা যাবে"; document.getElementById("previewDescription").textContent=document.getElementById("description").value.trim()||"বিস্তারিত লিখলে এখানে সংবাদটির প্রিভিউ দেখা যাবে।";}
+function updateUpazilaOptions(){
+  const districtName=districtSelect.value;
+  upazilaSelect.replaceChildren(new Option(districtName?"থানা / উপজেলা নির্বাচন করুন":"আগে জেলা নির্বাচন করুন",""));
+  if(!districtName){upazilaSelect.disabled=true; return;}
+  const locations=window.TBM_UPAZILAS_BY_DISTRICT?.[districtName];
+  if(!locations||!Array.isArray(locations.upazilas)||!Array.isArray(locations.thanas)){
+    upazilaSelect.disabled=true;
+    upazilaSelect.replaceChildren(new Option("এই জেলার তালিকা পাওয়া যায়নি",""));
+    console.error(`No thana/upazila list is configured for ${districtName}.`);
+    return;
+  }
+  for(const [groupName,names,suffix] of [["উপজেলা",locations.upazilas,""],["থানা",locations.thanas," থানা"]]){
+    if(!names.length) continue;
+    const group=document.createElement("optgroup");
+    group.label=groupName;
+    names.forEach(name=>group.append(new Option(`${name}${suffix}`,`${name}${suffix}`)));
+    upazilaSelect.add(group);
+  }
+  upazilaSelect.disabled=false;
+}
+function cancelNewsEdit(){
+  editingNewsId="";
+  newsForm.reset();
+  clearImage();
+  updateUpazilaOptions();
+  updatePreview();
+  publishButton.innerHTML="<span>সংবাদ প্রকাশ করুন</span><span>→</span>";
+  cancelEditButton.classList.add("hidden");
+  showMessage(formMessage, "সম্পাদনা বাতিল করা হয়েছে।", false);
+  formMessage.classList.remove("hidden");
+}
+function editNews(newsId){
+  const news=currentNewsById.get(newsId);
+  if(!news) throw new Error("সংবাদটি তালিকায় পাওয়া যায়নি। আবার লোড করে চেষ্টা করুন।");
+  if(selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
+  selectedObjectUrl="";
+  editingNewsId=newsId;
+  newsForm.elements.title.value=typeof news.title==="string"&&news.title!=="null"?news.title:"";
+  newsForm.elements.description.value=typeof news.desc==="string"&&news.desc!=="null"?news.desc:"";
+  const category=String(news.cat||news.division||"");
+  if(category&&!Array.from(newsForm.elements.category.options).some(option=>option.value===category)){
+    newsForm.elements.category.add(new Option(category,category));
+  }
+  newsForm.elements.category.value=category;
+  districtSelect.value=String(news.district||"");
+  updateUpazilaOptions();
+  const savedUpazila=String(news.upazila||"");
+  if(savedUpazila&&!Array.from(upazilaSelect.options).some(option=>option.value===savedUpazila)){
+    upazilaSelect.add(new Option(savedUpazila,savedUpazila));
+    upazilaSelect.disabled=false;
+  }
+  upazilaSelect.value=savedUpazila;
+  selectedImage=typeof news.img==="string"?news.img:"";
+  imageUrl.value=/^https?:\/\//i.test(selectedImage)?selectedImage:"";
+  if(selectedImage) showImage(selectedImage,"বর্তমান সংবাদের ছবি");
+  else clearImage();
+  updatePreview();
+  publishButton.innerHTML="<span>পরিবর্তন সংরক্ষণ করুন</span><span>→</span>";
+  cancelEditButton.classList.remove("hidden");
+  showMessage(formMessage,"সংবাদ সম্পাদনা করুন, তারপর পরিবর্তন সংরক্ষণ করুন।",false);
+  formMessage.classList.remove("hidden");
+  document.getElementById("createNews").scrollIntoView({behavior:"smooth",block:"start"});
+  newsForm.elements.title.focus({preventScroll:true});
+}
+function showLogin(message = "") {
+  window.clearInterval(sessionHeartbeat);
+  sessionHeartbeat = 0;
+  adminView.classList.add("hidden");
+  loginView.classList.remove("hidden");
+  if (message) {
+    loginError.textContent = message;
+    loginError.classList.remove("hidden");
+  }
+}
+
+async function startAdminSession() {
+  const response = await fetch("/api/admin/session", { cache: "no-store", credentials: "same-origin" });
+  if (response.status === 401) {
+    showLogin();
+    return false;
+  }
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || "লগইন অবস্থা যাচাই করা যায়নি।");
+  loginView.classList.add("hidden");
+  adminView.classList.remove("hidden");
+  document.getElementById("signedInEmail").textContent = "অ্যাডমিন";
+  document.getElementById("heroSignedInEmail").textContent = "অ্যাডমিন";
+  lastActivity = Date.now();
+  lastHeartbeatActivity = lastActivity;
+  window.clearInterval(sessionHeartbeat);
+  sessionHeartbeat = window.setInterval(async () => {
+    if (Date.now() - lastActivity >= 30 * 60 * 1000) {
+      await endAdminSession("৩০ মিনিট নিষ্ক্রিয় থাকায় আপনাকে লগআউট করা হয়েছে।");
+      return;
+    }
+    if (lastActivity === lastHeartbeatActivity) return;
+    try {
+      const heartbeat = await fetch("/api/admin/session", { cache: "no-store", credentials: "same-origin" });
+      if (heartbeat.status === 401) showLogin("সেশনের মেয়াদ শেষ হয়েছে। আবার লগইন করুন।");
+      else if (!heartbeat.ok) throw new Error("সেশন নবায়ন করা যায়নি।");
+      else lastHeartbeatActivity = lastActivity;
+    } catch (error) {
+      console.error("Admin session heartbeat failed.", error);
+      showLogin(`সেশন যাচাই করা যায়নি: ${error.message}`);
+    }
+  }, 60 * 1000);
+  await loadNews();
+  return true;
+}
+
+async function endAdminSession(message = "") {
+  window.clearInterval(sessionHeartbeat);
+  sessionHeartbeat = 0;
+  try {
+    const response = await fetch("/api/admin/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: "{}"
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "লগআউট করা যায়নি।");
+    showLogin(message);
+  } catch (error) {
+    console.error("Administrator sign-out failed.", error);
+    showMessage(formMessage, `লগআউট করা যায়নি: ${error.message}`, true);
+    formMessage.classList.remove("hidden");
+  }
+}
+
+for (const eventName of ["pointerdown", "keydown", "scroll", "touchstart"]) {
+  window.addEventListener(eventName, () => { lastActivity = Date.now(); }, { passive: true });
+}
+
+startAdminSession().catch(error => {
+  console.error("Admin session could not be checked.", error);
+  showLogin(`লগইন সেবা পাওয়া যাচ্ছে না: ${error.message}`);
+});
+
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  loginError.classList.add("hidden");
+  loginButton.disabled = true;
+  loginButton.textContent = "লগইন হচ্ছে…";
+  try {
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        email: emailInput.value,
+        totp: totpInput.value
+      })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "লগইন করা যায়নি।");
+    totpInput.value = "";
+    if (!await startAdminSession()) throw new Error("লগইন সেশন তৈরি করা যায়নি।");
+  } catch (error) {
+    totpInput.value = "";
+    loginError.textContent = error.message;
+    loginError.classList.remove("hidden");
+  } finally {
+    loginButton.disabled = false;
+    loginButton.innerHTML = 'সাইন ইন করুন <span aria-hidden="true">→</span>';
+  }
+});
+document.getElementById("logoutButton").addEventListener("click", () => endAdminSession());
+document.getElementById("title").addEventListener("input", updatePreview);
+document.getElementById("description").addEventListener("input", updatePreview);
+document.getElementById("category").addEventListener("change", updatePreview);
+districtSelect.addEventListener("change", updateUpazilaOptions);
+imageFile.addEventListener("change", async () => {
+  const file = imageFile.files[0]; if(!file) return;
+  if(file.size > 500*1024){ clearImage(); showMessage(formMessage, "ছবির আকার ৫০০ KB-এর বেশি।", true); formMessage.classList.remove("hidden"); return; }
+  try{
+    const imageData = await new Promise((resolve, reject)=>{ const r=new FileReader(); r.onload=()=>resolve(String(r.result)); r.onerror=()=>reject(r.error||new Error("ছবিটি পড়া যায়নি।")); r.readAsDataURL(file); });
+    if(selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl);
+    selectedImage=imageData; selectedObjectUrl=URL.createObjectURL(file); imageUrl.value=""; showImage(selectedObjectUrl, `ছবি প্রস্তুত · ${(file.size/1024).toFixed(0)} KB`); formMessage.classList.add("hidden");
+  }catch(error){ clearImage(); console.error("Selected image could not be read.", error); showMessage(formMessage, `ছবি খোলা যায়নি: ${error.message}`, true); formMessage.classList.remove("hidden"); }
+});
+imageUrl.addEventListener("input", () => {
+  const value = imageUrl.value.trim(); if(!value){ clearImage(); return; }
+  try{ const url=new URL(value); if(url.protocol!=="https:"&&url.protocol!=="http:") throw new Error("http/https হতে হবে"); if(selectedObjectUrl) URL.revokeObjectURL(selectedObjectUrl); selectedObjectUrl=""; selectedImage=value; imageFile.value=""; showImage(value, "ছবির লিংক যোগ করা হয়েছে"); }
+  catch(error){ selectedImage=""; previewWrap.classList.add("hidden"); uploadStatus.textContent=error.message; uploadStatus.className="mt-2 text-xs font-semibold text-rose-700"; uploadStatus.classList.remove("hidden"); }
+});
+document.getElementById("removeImage").addEventListener("click", clearImage);
+cancelEditButton.addEventListener("click", cancelNewsEdit);
+newsForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  publishButton.disabled=true; publishButton.innerHTML="<span>প্রকাশ করা হচ্ছে…</span>"; formMessage.classList.add("hidden");
+  try{
+    const form=new FormData(newsForm);
+    const title=String(form.get("title")??"").trim();
+    const description=String(form.get("description")??"").trim();
+    const category=String(form.get("category")??"").trim();
+    const district=String(form.get("district")??"").trim();
+    const upazila=String(form.get("upazila")??"").trim();
+    if(!title||!description||!category) throw new Error("শিরোনাম, বিভাগ ও সংবাদের বিস্তারিত পূরণ করুন।");
+    const newsData={ title, desc:description, img:selectedImage, cat:category, district, upazila, isDemo:editingNewsId ? currentNewsById.get(editingNewsId)?.isDemo===true : false };
+    if(editingNewsId){
+      await requestAdminApi("PATCH", { ...newsData, id: editingNewsId });
+      editingNewsId="";
+      newsForm.reset(); clearImage(); updateUpazilaOptions(); updatePreview();
+      cancelEditButton.classList.add("hidden");
+      showMessage(formMessage, "সংবাদের পরিবর্তন সফলভাবে সংরক্ষিত হয়েছে।", false);
+    }else{
+      await requestAdminApi("POST", newsData);
+      newsForm.reset(); clearImage(); updateUpazilaOptions(); updatePreview();
+      showMessage(formMessage, "সংবাদ সফলভাবে প্রকাশিত হয়েছে।", false);
+    }
+    formMessage.classList.remove("hidden"); await loadNews();
+  }catch(error){ showMessage(formMessage, `প্রকাশ করা যায়নি: ${error.message}`, true); formMessage.classList.remove("hidden"); }
+  finally{ publishButton.disabled=false; if(!editingNewsId) publishButton.innerHTML="<span>সংবাদ প্রকাশ করুন</span><span>→</span>"; }
+});
+async function loadNews(){
+  listStatus.textContent="সংবাদ লোড হচ্ছে…";
+  try{
+    const result=await requestAdminApi("GET");
+    const articles=result.news;
+    newsTotal.textContent=articles.length; listStatus.textContent=articles.length===0?"এখনো সংবাদ প্রকাশিত হয়নি":`সাম্প্রতিক ${articles.length}টি সংবাদ`;
+    currentNewsById=new Map(articles.map(news=>[news.id,news]));
+    newsList.innerHTML=articles.map(news=>{
+      const title=typeof news.title==="string"&&news.title.trim()&&news.title.trim().toLowerCase()!=="null"?news.title.trim():"শিরোনাম নেই";
+      const category=typeof news.cat==="string"&&news.cat.trim().toLowerCase()!=="null"?news.cat.trim():"";
+      return `<article class="flex items-start gap-3 rounded-xl border border-slate-200 p-3 hover:border-slate-300 hover:shadow-sm">${news.img?`<img src="${escapeHtml(news.img)}" class="h-14 w-14 shrink-0 rounded-lg object-cover" onerror="this.remove()">`:`<div class="flex h-14 w-14 items-center justify-center rounded-lg bg-rose-50">▤</div>`}<div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><p class="line-clamp-2 text-sm font-bold">${escapeHtml(title)}</p>${news.isDemo===true?'<span class="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-800">ডেমো</span>':""}</div><p class="mt-1 text-xs text-slate-500">${escapeHtml(category)}</p><p class="mt-1 text-xs text-slate-400">${escapeHtml(news.time||"")}</p><div class="mt-2 flex flex-wrap items-center gap-3"><button data-edit="${escapeHtml(news.id)}" class="text-xs font-semibold text-[#087f73] hover:text-[#075e57]">পোস্ট এডিট</button><button data-delete="${escapeHtml(news.id)}" class="text-xs font-semibold text-rose-700">পোস্ট ডিলেট</button></div></div></article>`;
+    }).join("")||'<p class="rounded-xl bg-slate-50 p-5 text-center text-sm text-slate-500">এখনো কোনো সংবাদ প্রকাশিত হয়নি।</p>';
+  }catch(error){ listStatus.textContent=`লোড করা যায়নি: ${error.message}`; }
+}
+document.getElementById("addDemoNews").addEventListener("click", async event => {
+  const button=event.currentTarget;
+  const demos=[
+    ["ডемо: এলাকার উন্নয়ন সংবাদ","এটি শুধু ওয়েবসাইটের নকশা দেখানোর নমুনা লেখা; কোনো বাস্তব ঘটনা বা সংবাদ নয়।","ঢাকা"],
+    ["ডেমো: জনসচেতনতামূলক প্রতিবেদন","এটি পরীক্ষামূলক ডেমো কনটেন্ট। প্রকাশের আগে নিজের যাচাইকৃত সংবাদ দিয়ে বদলে দিন।","জাতীয়"],
+    ["ডেমো: শিক্ষা বিষয়ক সংবাদ","এই লেখাটি কেবল কার্ডের নমুনা হিসেবে তৈরি; বাস্তব সংবাদ হিসেবে ব্যবহার করবেন না।","জাতীয়"],
+    ["ডেমো: আবহাওয়া আপডেট","এটি কোনো আবহাওয়ার পূর্বাভাস নয়—শুধু ডেমো বক্স দেখানোর জন্য লেখা।","আবহাওয়া"],
+    ["ডেমো: স্থানীয় ক্রীড়া সংবাদ","এটি কাল্পনিক নমুনা কনটেন্ট। পরে অ্যাডমিন প্যানেল থেকে সহজেই মুছে ফেলতে পারবেন।","ঢাকা"],
+    ["ডেমো: পাঠক সচেতনতা","এই ডেমো লেখায় কোনো বাস্তব দাবি নেই। নিজের সংবাদ যোগ করার আগে এটি মুছে দিন।","জাতীয়"]
+  ];
+  if(!confirm("৬টি স্পষ্টভাবে চিহ্নিত ডেমো নিউজ Firebase-এ যোগ হবে। পরে এই তালিকা থেকেই মুছতে পারবেন। যোগ করবেন?")) return;
+  button.disabled=true;
+  let added=0;
+  try{
+    for(const [title,desc,cat] of demos){
+      await requestAdminApi("POST",{title,desc,cat,district:"",upazila:"",img:"",isDemo:true});
+      added++;
+    }
+    showMessage(formMessage,"৬টি ডেমো নিউজ যোগ হয়েছে। হোমপেজে প্রধান সংবাদের নিচে দেখা যাবে; প্রকাশিত সংবাদের তালিকা থেকে সম্পাদনা বা ডিলেট করতে পারবেন।",false);
+    formMessage.classList.remove("hidden");
+  }catch(error){
+    console.error("Demo news could not be added.",error);
+    showMessage(formMessage,`${added}টি ডেমো নিউজ যোগ হয়েছে; বাকিগুলো যোগ করা যায়নি: ${error.message}`,true);
+    formMessage.classList.remove("hidden");
+  }finally{
+    button.disabled=false;
+    await loadNews();
+  }
+});
+newsList.addEventListener("click", async event => {
+  const editButton=event.target.closest("[data-edit]");
+  if(editButton){
+    editButton.disabled=true;
+    try{ editNews(editButton.dataset.edit); }
+    catch(error){ console.error("News edit form could not be opened.",error); showMessage(formMessage,`সংবাদ সম্পাদনা করা যায়নি: ${error.message}`,true); formMessage.classList.remove("hidden"); }
+    finally{ editButton.disabled=false; }
+    return;
+  }
+  const button=event.target.closest("[data-delete]"); if(!button||!confirm("মুছে ফেলতে চান?")) return;
+  button.disabled=true; button.textContent="মুছছে…";
+  try{ await requestAdminApi("DELETE", { id: button.dataset.delete }); await loadNews(); }
+  catch(error){ button.disabled=false; button.textContent="আবার চেষ্টা করুন"; showMessage(formMessage, `মুছে ফেলা যায়নি: ${error.message}`, true); formMessage.classList.remove("hidden"); }
+});
+</script>
+</body>
+</html>

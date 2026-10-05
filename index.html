@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta name="google-site-verification" content="PV4zsgF1H-JrzBgg3x0uAFgMCZSDdwMkeDK1EJ9yMic" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="TBM NEWS BD — ন্যায়ের কথা বলি এবং লিখি। সত্য ও বস্তুনিষ্ঠ সংবাদে আমরা অঙ্গীকারবদ্ধ।">
+  <title>TBM NEWS BD | ন্যায়ের কথা বলি এবং লিখি</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      font-family: "Hind Siliguri", sans-serif;
+      background: linear-gradient(125deg, #f8fafc, #fdf2f8, #ecfdf5, #fff7ed, #eef2ff);
+      background-size: 300% 300%;
+      animation: backgroundFlow 36s ease-in-out infinite;
+    }
+    @keyframes backgroundFlow {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .line-clamp-2 { display: -webkit-box; line-clamp: 2; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .line-clamp-3 { display: -webkit-box; line-clamp: 3; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .news-scroll::-webkit-scrollbar { height: 4px; }
+    .news-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: #cbd5e1; }
+    .ticker-window { overflow: hidden; white-space: nowrap; }
+    .ticker-track { display: flex; width: max-content; animation: tickerFlow 38s linear infinite; }
+    .ticker-group { display: flex; flex: 0 0 auto; align-items: center; gap: 1.5rem; padding-right: 1.5rem; }
+    @keyframes tickerFlow { to { transform: translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce) {
+      body { animation: none; background-position: 50% 50%; }
+      .ticker-track { animation: none; }
+    }
+    .site-container {
+      width: min(100%, 1600px);
+      box-sizing: border-box;
+      margin-inline: auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900 antialiased">
+  <div class="bg-slate-950 text-slate-300">
+    <div class="site-container flex items-center justify-end gap-3 px-4 py-2 text-xs sm:px-6 lg:px-10">
+      <time id="date" class="shrink-0"></time>
+    </div>
+  </div>
+
+  <header class="border-b border-slate-200 bg-white">
+    <div class="site-container flex items-center justify-between gap-3 px-4 py-4 sm:px-6 lg:px-10">
+      <a href="index.html" class="flex min-w-0 items-center gap-3" aria-label="TBM NEWS BD হোম">
+        <img src="logo.png" alt="TBM NEWS BD লোগো" class="h-12 w-12 shrink-0 rounded-full object-contain sm:h-16 sm:w-16">
+        <span class="min-w-0">
+          <span class="block text-lg font-bold leading-tight tracking-tight text-rose-800 sm:text-3xl">TBM NEWS BD</span>
+          <span class="mt-1 block text-xs font-medium text-slate-500 sm:text-sm">ন্যায়ের কথা বলি এবং লিখি</span>
+        </span>
+      </a>
+      <div class="flex shrink-0 items-center gap-2">
+        <a href="https://www.facebook.com/twobrothermedia" target="_blank" rel="noopener noreferrer" aria-label="TBM News Facebook" class="hidden h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-sm font-bold text-blue-700 transition hover:bg-blue-100 sm:inline-flex">f</a>
+        <a href="https://youtube.com/channel/UCtJTU2Qn9bBrTEs9hkMgUZg" target="_blank" rel="noopener noreferrer" aria-label="TBM News YouTube" class="hidden h-9 w-9 items-center justify-center rounded-full bg-rose-50 text-xs font-bold text-rose-700 transition hover:bg-rose-100 sm:inline-flex">▶</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="bg-rose-800 text-white">
+    <div class="site-container flex items-stretch px-4 sm:px-6 lg:px-10">
+      <span class="shrink-0 bg-slate-950 px-4 py-2.5 text-sm font-bold">বার্তা</span>
+      <div id="ticker" class="ticker-window min-w-0 flex-1 px-4 py-2.5 text-sm" aria-label="ন্যায়ের কথা বলি এবং লিখি">
+        <div id="tickerTrack" class="ticker-track" aria-hidden="true">
+          <div id="tickerPrimary" class="ticker-group"><span>ন্যায়ের কথা বলি এবং লিখি</span></div>
+          <div id="tickerDuplicate" class="ticker-group"><span>ন্যায়ের কথা বলি এবং লিখি</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sticky top-0 z-20 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur" aria-label="প্রধান বিভাগ">
+    <div id="navigation" class="site-container px-4 py-2 sm:px-6 lg:px-10"></div>
+  </nav>
+
+  <main class="site-container px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+    <div id="status" role="status" class="mb-5 hidden rounded-xl border px-4 py-3 text-sm"></div>
+
+    <div class="mb-5 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-rose-700">সত্য ও বস্তুনিষ্ঠ সংবাদ</p>
+        <h1 class="mt-1 text-xl font-bold sm:text-2xl">আজকের সংবাদ</h1>
+      </div>
+    </div>
+
+    <section class="grid items-start gap-6 lg:grid-cols-12 lg:gap-8" aria-label="প্রধান সংবাদ">
+      <div id="lead" class="min-w-0 lg:col-span-8"></div>
+      <aside class="space-y-5 lg:col-span-4">
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+            <div>
+              <p class="text-xs font-bold text-rose-700">এক নজরে</p>
+              <h2 class="mt-0.5 text-lg font-bold">সর্বশেষ সংবাদ</h2>
+            </div>
+            <span class="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-800">LIVE</span>
+          </div>
+          <div id="latest" class="divide-y divide-slate-100 px-5"></div>
+        </section>
+
+      </aside>
+    </section>
+
+    <section id="demoNewsSection" class="mt-8 hidden" aria-labelledby="demo-news-heading">
+      <div class="mb-4 flex items-end justify-between gap-3 border-b-2 border-slate-200 pb-3">
+        <div>
+          <p class="text-xs font-bold text-rose-700">নমুনা কনটেন্ট</p>
+          <h2 id="demo-news-heading" class="mt-1 text-xl font-bold">ডেমো নিউজ</h2>
+        </div>
+        <span class="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500">অ্যাডমিন প্যানেল থেকে সম্পাদনা/মুছুন</span>
+      </div>
+      <div id="demoNews" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </section>
+
+    <section class="mt-10" aria-labelledby="all-news-heading">
+      <div class="mb-4 flex flex-col gap-3 border-b-2 border-slate-200 pb-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-rose-700">সর্বশেষ আপডেট</p>
+          <h2 id="all-news-heading" class="mt-1 text-2xl font-bold">সর্বশেষ সংবাদ</h2>
+          <p id="news-count" class="mt-1 text-xs text-slate-500"></p>
+        </div>
+        <label class="relative block w-full sm:w-64">
+          <span class="sr-only">সংবাদ খুঁজুন</span>
+          <span aria-hidden="true" class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">⌕</span>
+          <input id="news-search" type="search" placeholder="সংবাদ খুঁজুন…" class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-rose-700 focus:ring-4 focus:ring-rose-100">
+        </label>
+      </div>
+      <div id="grid" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+    </section>
+
+    <div id="divisions"></div>
+  </main>
+
+  <section class="site-container px-4 sm:px-6 lg:px-10" aria-label="বিজ্ঞাপন">
+    <div class="grid gap-4 border-t border-slate-200 py-8 md:grid-cols-2">
+      <div class="flex min-h-44 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 p-5 text-center">
+        <span class="text-xs font-bold tracking-widest text-slate-400">বিজ্ঞাপন</span>
+        <p class="mt-2 text-lg font-bold text-slate-600">আপনার বিজ্ঞাপনের জায়গা</p>
+        <p class="mt-1 text-sm text-slate-400">বিজ্ঞাপন যোগ হলে এই বক্সে দেখানো যাবে</p>
+      </div>
+      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <img src="ads-placeholder.svg" alt="বিজ্ঞাপন দেওয়ার জন্য নমুনা ব্যানার; বিজ্ঞাপন এলে এই ছবিটি বদলে দিন" class="h-44 w-full object-cover">
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-12 bg-slate-950 text-slate-300">
+    <div class="site-container grid gap-8 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-10">
+      <div>
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="" class="h-11 w-11 rounded-full bg-white p-1 object-contain">
+          <h2 class="text-lg font-bold text-white">TBM NEWS BD</h2>
+        </div>
+        <p class="mt-4 text-sm leading-6">ন্যায়ের কথা বলি এবং লিখি। সত্য ও বস্তুনিষ্ঠ সংবাদে আমরা অঙ্গীকারবদ্ধ।</p>
+      </div>
+      <div>
+        <h2 class="border-l-2 border-rose-700 pl-3 font-bold text-white">যোগাযোগ</h2>
+        <p class="mt-3 text-sm leading-7">সম্পাদক: মো শফিকুল ইসলাম<br>ঠিকানা: ঢাকা খিলগাঁও<br>মোবাইল: <a href="tel:01776213676" class="transition hover:text-white">01776213676</a><br><br>সাধারণ সম্পাদক: মো: সাইদুল ইসলাম<br>ঠিকানা: ঢাকা পল্টন</p>
+      </div>
+      <div>
+        <h2 class="border-l-2 border-rose-700 pl-3 font-bold text-white">সামাজিক যোগাযোগ</h2>
+        <a href="https://www.facebook.com/twobrothermedia" target="_blank" rel="noopener noreferrer" class="mt-3 block text-sm transition hover:text-white">ফেসবুক পেজ</a>
+        <a href="https://facebook.com/groups/tbmtv/" target="_blank" rel="noopener noreferrer" class="mt-2 block text-sm transition hover:text-white">ফেসবুক গ্রুপ</a>
+        <a href="https://www.facebook.com/SHFIKULPATUAKHALI" target="_blank" rel="noopener noreferrer" class="mt-2 block text-sm transition hover:text-white">শফিকুল ইসলামের ফেসবুক</a>
+        <a href="https://youtube.com/channel/UCtJTU2Qn9bBrTEs9hkMgUZg" target="_blank" rel="noopener noreferrer" class="mt-2 block text-sm transition hover:text-white">YouTube Channel</a>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 px-4 py-3 text-center text-[11px] text-slate-400">© ২০২৬ TBM NEWS BD — সর্বস্বত্ব সংরক্ষিত</div>
+  </footer>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB_Jr66GoSsKTPVq8bdnYSMsh6W2WPTOfTk",
+      authDomain: "tbmnews-fdd03.firebaseapp.com",
+      projectId: "tbmnews-fdd03"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const topicCategories = ["সর্বশেষ", "জাতীয়", "রাজনীতি", "আন্তর্জাতিক", "অর্থনীতি", "বিনোদন", "খেলাধুলা", "শিক্ষা", "স্বাস্থ্য", "প্রযুক্তি", "ইসলামিক", "আবহাওয়া"];
+    const crimeCategories = ["দুর্নীতি", "চাঁদাবাজি", "লুটপাট", "ধর্ষণ"];
+    const regionalCategories = ["ঢাকা", "চট্টগ্রাম", "বরিশাল", "রাজশাহী", "খুলনা", "সিলেট", "রংপুর", "ময়মনসিংহ"];
+    const categories = [...topicCategories, ...crimeCategories, ...regionalCategories];
+    let allNews = [];
+    let demoNews = [];
+    let activeCategory = "সর্বশেষ";
+    let searchQuery = "";
+
+    document.getElementById("date").textContent = new Date().toLocaleDateString("bn-BD", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric"
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function imageUrl(value) {
+      if (!value) return "";
+      if (/^data:image\/(?:png|jpeg|webp|gif|svg\+xml);base64,[A-Za-z0-9+/=]+$/i.test(value)) return escapeHtml(value);
+      try {
+        const url = new URL(value, location.href);
+        return ["https:", "http:"].includes(url.protocol) ? escapeHtml(url.href) : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function newsCategory(news) {
+      return newsText(news.cat) || newsText(news.division) || "জাতীয়";
+    }
+
+    function newsText(value) {
+      const text = String(value ?? "").trim();
+      if (/^(null|undefined)$/i.test(text)) return "";
+      return text.replace(/TBM\s+NEWS\s+24(?:\s+BD)?/gi, match => match.toUpperCase().endsWith(" BD") ? "TBM NEWS BD" : "TBM NEWS");
+    }
+
+    function newsUrl(news) {
+      const url = new URL(location.href);
+      url.search = "";
+      url.hash = "";
+      url.searchParams.set("id", news.id);
+      return url.href;
+    }
+
+    function shareLinks(news) {
+      const directUrl = newsUrl(news);
+      const shareUrl = encodeURIComponent(directUrl);
+      const title = encodeURIComponent(newsText(news.title) || "TBM NEWS BD");
+      return `<div class="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+        <span class="mr-1 text-xs font-semibold text-slate-400">শেয়ার</span>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" rel="noopener noreferrer" class="rounded-md bg-blue-50 px-2.5 py-1.5 text-xs font-bold text-blue-700 transition hover:bg-blue-100">Facebook</a>
+        <a href="https://wa.me/?text=${title}%20${shareUrl}" target="_blank" rel="noopener noreferrer" class="rounded-md bg-emerald-50 px-2.5 py-1.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-100">WhatsApp</a>
+        <a href="https://t.me/share/url?url=${shareUrl}&text=${title}" target="_blank" rel="noopener noreferrer" class="rounded-md bg-sky-50 px-2.5 py-1.5 text-xs font-bold text-sky-700 transition hover:bg-sky-100">Telegram</a>
+        <button type="button" data-copy-link="${escapeHtml(news.id)}" class="rounded-md bg-slate-100 px-2.5 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-200">লিংক কপি</button>
+      </div>`;
+    }
+
+    function renderNavigation() {
+      const renderCategoryButtons = categoryList => categoryList.map(category => `
+        <button type="button" data-category="${escapeHtml(category)}" aria-pressed="${category === activeCategory}"
+          class="w-full rounded-lg px-3 py-2 text-left text-sm font-semibold transition
+          ${category === activeCategory ? "bg-rose-700 text-white" : "text-slate-700 hover:bg-rose-50 hover:text-rose-800"}">${escapeHtml(category)}</button>`).join("");
+      document.getElementById("navigation").innerHTML = `
+        <details class="relative w-fit">
+          <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-700 shadow-sm transition hover:border-rose-300 hover:text-rose-800 focus:outline-none focus:ring-2 focus:ring-rose-200">
+            বিভাগ <span aria-hidden="true">▼</span>
+          </summary>
+          <div class="absolute left-0 top-full z-30 mt-2 max-h-[70vh] w-72 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl sm:w-80">
+            <p class="px-3 pb-1 pt-2 text-xs font-bold text-slate-400">বিষয়</p>
+            ${renderCategoryButtons(topicCategories)}
+            <details class="mt-1 border-t border-slate-100 pt-1">
+              <summary class="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-800">অপরাধ <span aria-hidden="true">▼</span></summary>
+              <div class="pl-3">${renderCategoryButtons(crimeCategories)}</div>
+            </details>
+            <details class="mt-1 border-t border-slate-100 pt-1">
+              <summary class="cursor-pointer list-none rounded-lg px-3 py-2 text-sm font-bold text-slate-700 hover:bg-rose-50 hover:text-rose-800">অঞ্চল <span aria-hidden="true">▼</span></summary>
+              <div class="pl-3">${renderCategoryButtons(regionalCategories)}</div>
+            </details>
+          </div>
+        </details>`;
+    }
+
+    function renderTicker() {
+      const headlines = allNews.slice(0, 8).map(news => newsText(news.title)).filter(Boolean);
+      const messages = ["ন্যায়ের কথা বলি এবং লিখি", ...headlines];
+      const primary = document.getElementById("tickerPrimary");
+      const duplicate = document.getElementById("tickerDuplicate");
+      primary.replaceChildren();
+      do {
+        for (const message of messages) {
+          if (primary.childElementCount) {
+            const separator = document.createElement("span");
+            separator.textContent = "•";
+            separator.setAttribute("aria-hidden", "true");
+            primary.append(separator);
+          }
+          const item = document.createElement("span");
+          item.textContent = message;
+          primary.append(item);
+        }
+      } while (primary.scrollWidth < document.getElementById("ticker").clientWidth);
+      duplicate.replaceChildren(...Array.from(primary.children, item => item.cloneNode(true)));
+    }
+
+    renderNavigation();
+    renderTicker();
+
+    function categoryMatches(news, category) {
+      const value = newsText(news.cat) || newsText(news.division);
+      if (category === "অপরাধ") return crimeCategories.includes(value);
+      if (category === "আবহাওয়া") return value === "আবহাওয়া" || value === "আবহাওয়া";
+      return value === category || newsText(news.division) === category;
+    }
+
+    function articleCard(news, isDemo = false) {
+      const image = imageUrl(news.img);
+      const url = newsUrl(news);
+      const title = newsText(news.title) || "শিরোনাম নেই";
+      const description = newsText(news.desc);
+      return `<article class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
+        <a href="${escapeHtml(url)}" class="relative block h-48 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950">
+          <img src="${image || "logo.png"}" alt="${image ? escapeHtml(title) : "TBM NEWS BD"}" loading="lazy"
+            class="${image ? "h-full w-full object-cover transition duration-500 group-hover:scale-105" : "absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-2 object-contain"}"
+            onerror="this.onerror=null;this.src='logo.png';this.className='absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-2 object-contain'">
+          ${image ? '<span class="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent"></span>' : ""}
+          <span class="absolute bottom-3 left-3 rounded-full bg-rose-700 px-3 py-1 text-xs font-bold text-white">${isDemo ? "ডেমো · " : ""}${escapeHtml(newsCategory(news))}</span>
+        </a>
+        <div class="p-4">
+          <a href="${escapeHtml(url)}" class="block">
+            <h3 class="line-clamp-2 text-lg font-bold leading-snug transition group-hover:text-rose-800">${escapeHtml(title)}</h3>
+            <p class="mt-2 text-xs text-slate-400">${escapeHtml(news.time || "")}${news.district ? ` · ${escapeHtml(news.district)}` : ""}</p>
+            <p class="line-clamp-2 mt-3 text-sm leading-6 text-slate-600">${escapeHtml(description)}</p>
+          </a>
+          <div class="mt-4">${shareLinks(news)}</div>
+        </div>
+      </article>`;
+    }
+
+    function renderLead(news) {
+      const image = imageUrl(news.img);
+      const url = newsUrl(news);
+      const title = newsText(news.title) || "শিরোনাম নেই";
+      const description = newsText(news.desc) || "বিস্তারিত তথ্য পাওয়া যায়নি।";
+      const expanded = new URLSearchParams(location.search).get("id") === news.id;
+      const locationText = [newsText(news.district), newsText(news.upazila)].filter(Boolean).join(" · ");
+      return `<article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <a href="${escapeHtml(url)}" class="group relative block h-72 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950 sm:h-96 lg:h-[30rem]">
+          <img src="${image || "logo.png"}" alt="${image ? escapeHtml(title) : "TBM NEWS BD"}"
+            class="${image ? "absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" : "absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-3 object-contain opacity-90"}"
+            onerror="this.onerror=null;this.src='logo.png';this.className='absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-3 object-contain opacity-90'">
+          <span class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent"></span>
+          <span class="absolute bottom-0 left-0 right-0 p-5 text-white sm:p-7">
+            <span class="inline-flex rounded-full bg-rose-700 px-3 py-1 text-xs font-bold">${escapeHtml(newsCategory(news))}</span>
+            <span class="mt-3 block max-w-3xl text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">${escapeHtml(title)}</span>
+            <span class="mt-3 block text-xs text-white/80">${escapeHtml(news.time || "")}${locationText ? ` · ${escapeHtml(locationText)}` : ""}</span>
+          </span>
+        </a>
+        <div class="p-5 sm:p-6">
+          <p class="${expanded ? "whitespace-pre-line" : "line-clamp-3"} text-base leading-7 text-slate-600">${escapeHtml(description)}</p>
+          ${expanded ? "" : `<a href="${escapeHtml(url)}" class="mt-3 inline-block text-sm font-bold text-rose-800 transition hover:text-rose-950">বিস্তারিত পড়ুন →</a>`}
+          <div class="mt-5">${shareLinks(news)}</div>
+        </div>
+      </article>`;
+    }
+
+    function render() {
+      const categoryNews = activeCategory === "সর্বশেষ"
+        ? allNews
+        : allNews.filter(news => categoryMatches(news, activeCategory));
+      const visibleNews = searchQuery
+        ? categoryNews.filter(news => `${newsText(news.title)} ${newsText(news.desc)} ${newsText(news.district)} ${newsText(news.upazila)}`.toLocaleLowerCase("bn").includes(searchQuery))
+        : categoryNews;
+      const selectedId = new URLSearchParams(location.search).get("id");
+      const lead = demoNews.find(news => news.id === selectedId)
+        || visibleNews.find(news => news.id === selectedId)
+        || visibleNews[0];
+      const remaining = lead ? visibleNews.filter(news => news.id !== lead.id) : [];
+
+      renderTicker();
+      document.getElementById("lead").innerHTML = lead
+        ? renderLead(lead)
+        : '<div class="rounded-2xl border border-slate-200 bg-white p-10 text-center text-slate-500">এই বিভাগে এখনো কোনো সংবাদ প্রকাশিত হয়নি।</div>';
+      document.getElementById("latest").innerHTML = allNews.slice(0, 6).map(news => {
+        const thumbnail = imageUrl(news.img);
+        return `
+        <a href="${escapeHtml(newsUrl(news))}" class="group flex items-center gap-3 py-4 transition hover:text-rose-800">
+          <img src="${thumbnail || "logo.png"}" alt="" aria-hidden="true" loading="lazy"
+            class="h-14 w-20 shrink-0 rounded-lg border border-slate-100 ${thumbnail ? "object-cover" : "bg-slate-50 object-contain p-1"}"
+            onerror="this.onerror=null;this.src='logo.png';this.className='h-14 w-20 shrink-0 rounded-lg border border-slate-100 bg-slate-50 object-contain p-1'">
+          <span class="min-w-0 flex-1">
+            <span class="line-clamp-2 block text-sm font-semibold leading-6">${escapeHtml(newsText(news.title) || "শিরোনাম নেই")}</span>
+            <span class="mt-1 block text-xs text-slate-400">${escapeHtml(newsCategory(news))}</span>
+          </span>
+        </a>`;
+      }).join("") || '<p class="py-5 text-sm text-slate-500">এখনো কোনো সংবাদ প্রকাশিত হয়নি।</p>';
+      document.getElementById("demoNewsSection").classList.toggle("hidden", demoNews.length === 0);
+      document.getElementById("demoNews").innerHTML = demoNews.map(news => articleCard(news, true)).join("");
+      document.getElementById("grid").innerHTML = remaining.length
+        ? remaining.map(articleCard).join("")
+        : "";
+      document.getElementById("news-count").textContent = `${visibleNews.length}টি সংবাদ`;
+
+      const divisions = document.getElementById("divisions");
+      divisions.innerHTML = activeCategory === "সর্বশেষ" && !searchQuery
+        ? categories.slice(1).map(category => {
+          const items = allNews.filter(news => categoryMatches(news, category)).slice(0, 3);
+          return items.length ? `<section class="mt-10">
+            <div class="mb-4 flex items-end justify-between border-b-2 border-slate-200 pb-3">
+              <div><p class="text-xs font-bold text-rose-700">বিভাগভিত্তিক সংবাদ</p><h2 class="mt-1 text-xl font-bold">${escapeHtml(category)}</h2></div>
+              <button type="button" data-category="${escapeHtml(category)}" class="text-sm font-bold text-rose-800 hover:text-rose-950">সব দেখুন →</button>
+            </div>
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">${items.map(articleCard).join("")}</div>
+          </section>` : "";
+        }).join("")
+        : "";
+      renderNavigation();
+    }
+
+    document.getElementById("news-search").addEventListener("input", event => {
+      searchQuery = event.target.value.trim().toLocaleLowerCase("bn");
+      render();
+    });
+
+    document.getElementById("navigation").addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      document.querySelector("#navigation > details").open = false;
+      document.querySelectorAll("#navigation details details").forEach(menu => { menu.open = false; });
+      history.replaceState(null, "", location.pathname);
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("divisions").addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+      activeCategory = button.dataset.category;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.body.addEventListener("click", async event => {
+      const button = event.target.closest("[data-copy-link]");
+      if (!button) return;
+      const url = newsUrl({ id: button.dataset.copyLink });
+      try {
+        await navigator.clipboard.writeText(url.href);
+        button.textContent = "কপি হয়েছে";
+      } catch (error) {
+        console.error("News link could not be copied.", error);
+        button.textContent = "কপি হয়নি";
+      }
+      window.setTimeout(() => { button.textContent = "লিংক কপি"; }, 1800);
+    });
+
+    db.collection("news").orderBy("timestamp", "desc").onSnapshot(snapshot => {
+      const articles = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+      demoNews = articles.filter(news => news.isDemo === true);
+      allNews = articles.filter(news => news.isDemo !== true);
+      render();
+      document.getElementById("status").classList.add("hidden");
+    }, error => {
+      console.error("News feed could not be loaded.", error);
+      const status = document.getElementById("status");
+      status.textContent = "সংবাদ লোড করা যায়নি। ইন্টারনেট সংযোগ ও Firebase সেটিং পরীক্ষা করে আবার চেষ্টা করুন।";
+      status.className = "mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800";
+    });
+  </script>
+</body>
+</html>
