@@ -24,9 +24,10 @@ Vercel project settings:
   instances.
 
 Before deploying, run [database/schema.sql](./database/schema.sql) in the
-Neon SQL Editor to create the news table and its ordering index. The public
-`/api/news` endpoint reads this table; create, edit, and delete operations use
-the authenticated `/api/admin/news` endpoint.
+Neon SQL Editor to create the news and homepage-advertisement tables and their
+indexes. It is safe to run again after schema updates. The public `/api/news`
+and `/api/ads` endpoints read these tables; admin changes use authenticated
+`/api/admin/news` and `/api/admin/ads` endpoints.
 
 Generate a session secret in Windows PowerShell:
 `$bytes = New-Object byte[] 48; [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes); [Convert]::ToBase64String($bytes)`.
@@ -73,6 +74,15 @@ The admin panel's **৬টি ডেমো নিউজ যোগ করুন**
 rows to Neon. They appear in a separate homepage section after the
 lead story and latest-news panel, not among the real headlines. Edit or remove
 them individually from the published-news list in the admin panel.
+
+## Homepage advertisement
+
+After signing in, select the image-shaped button in the top-right toolbar or
+**বিজ্ঞাপন দিন** in the sidebar. Upload a PNG/JPEG/WebP/GIF image up to 500 KB
+or provide an HTTP/HTTPS image URL. Optionally add a title and destination
+link, then select **বিজ্ঞাপন সংরক্ষণ করুন**. The banner appears on the homepage;
+use **বিজ্ঞাপন সরান** to remove it. The admin API stores the image and link in
+Neon, and the public `/api/ads` endpoint serves only that ad.
 
 Do not deploy the API until the Neon schema and all required environment
 variables are configured. Keep Firestore and its security rules unchanged while

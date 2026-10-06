@@ -164,6 +164,7 @@
           <a href="#dashboard" class="sidebar-link active" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg> ড্যাশবোর্ড</a>
           <a href="#newsForm" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg> নতুন সংবাদ লিখুন</a>
           <a href="#publishedNews" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4.5h14a1.5 1.5 0 0 1 1.5 1.5v13a1 1 0 0 1-1.5.9L12 16l-7 3.9a1 1 0 0 1-1.5-.9V6A1.5 1.5 0 0 1 5 4.5Z"/><path d="M8 8h8M8 11h8"/></svg> প্রকাশিত সংবাদ</a>
+          <a href="#advertisementForm" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg> বিজ্ঞাপন দিন</a>
           <p class="px-3 pb-2 pt-7 text-[10px] font-bold tracking-[.18em] text-white/35">ওয়েবসাইট</p>
           <a href="../index.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5M9 21v-7h6v7"/></svg> নিউজ পোর্টাল দেখুন <span class="ml-auto" aria-hidden="true">↗</span></a>
         </nav>
@@ -176,6 +177,9 @@
         <header class="topbar">
           <div><p class="text-xs font-medium text-slate-400">TBM NEWS BD <span class="px-1">/</span> অ্যাডমিন</p><h1 class="text-lg font-bold leading-tight sm:text-xl">ড্যাশবোর্ড</h1></div>
           <div class="flex items-center gap-2 sm:gap-3">
+            <a href="#advertisementForm" aria-label="বিজ্ঞাপন যোগ করুন" title="বিজ্ঞাপন যোগ করুন" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-lg text-[#087f73] transition hover:bg-emerald-100">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg>
+            </a>
             <a href="../index.html" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition hover:border-emerald-300 hover:text-[#087f73] sm:px-4 sm:text-sm"><span aria-hidden="true">↗</span><span class="hidden sm:inline">সাইট দেখুন</span><span class="sm:hidden">সাইট</span></a>
             <div class="hidden h-8 w-px bg-slate-200 sm:block"></div>
             <div class="hidden text-right sm:block"><p id="signedInEmail" class="max-w-44 truncate text-xs font-bold text-slate-700">অ্যাডমিন</p><p class="text-[11px] text-slate-400">সাইন ইন করা আছে</p></div>
@@ -225,6 +229,39 @@
               <div id="newsList" class="news-scrollbar max-h-[68vh] space-y-3 overflow-y-auto p-4"></div>
             </aside>
           </div>
+          <section id="advertisementForm" class="surface mt-6 overflow-hidden">
+            <div class="flex items-center gap-3 border-b border-[#edf2ef] px-5 py-5 sm:px-7">
+              <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-xl text-amber-700" aria-hidden="true">▧</span>
+              <div><h2 class="text-lg font-bold sm:text-xl">হোমপেজে বিজ্ঞাপন দিন</h2><p class="mt-0.5 text-xs text-slate-500 sm:text-sm">ছবি আপলোড করুন বা ছবির লিংক দিন; চাইলে ক্লিকের গন্তব্য যোগ করুন।</p></div>
+            </div>
+            <form id="adForm" class="grid gap-5 p-5 sm:p-7 lg:grid-cols-[minmax(0,1fr)_minmax(260px,.8fr)]">
+              <div class="space-y-4">
+                <label class="block text-sm font-semibold text-slate-700">বিজ্ঞাপনের নাম (ঐচ্ছিক)
+                  <input id="adTitle" maxlength="180" placeholder="যেমন: বিশেষ অফার" class="form-control mt-2">
+                </label>
+                <div>
+                  <label class="block text-sm font-semibold text-slate-700">বিজ্ঞাপনের ছবি <span class="text-[#087f73]">*</span></label>
+                  <div class="mt-2 grid gap-3 sm:grid-cols-2">
+                    <label class="flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#dfe8e4] bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-400 hover:text-[#087f73]"><span aria-hidden="true">＋</span> ডিভাইস থেকে ছবি বাছুন<input id="adImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="sr-only"></label>
+                    <input id="adImageUrl" type="url" placeholder="ছবির URL · https://" class="form-control bg-white text-sm">
+                  </div>
+                  <p class="mt-1 text-xs text-slate-500">আপলোড করা ছবি ৫০০ KB-এর মধ্যে হতে হবে।</p>
+                </div>
+                <label class="block text-sm font-semibold text-slate-700">ক্লিক করলে যে লিংকে যাবে (ঐচ্ছিক)
+                  <input id="adTargetUrl" type="url" placeholder="https://example.com" class="form-control mt-2">
+                </label>
+                <p id="adFormMessage" role="status" class="hidden"></p>
+                <div class="flex flex-wrap gap-3">
+                  <button id="saveAdButton" type="submit" class="primary-button px-5 py-3">বিজ্ঞাপন সংরক্ষণ করুন</button>
+                  <button id="removeAdButton" type="button" class="hidden rounded-xl border border-rose-200 bg-rose-50 px-5 py-3 font-semibold text-rose-700 transition hover:bg-rose-100">বিজ্ঞাপন সরান</button>
+                </div>
+              </div>
+              <div>
+                <p class="mb-2 text-xs font-bold text-slate-500">প্রিভিউ</p>
+                <div id="adPreview" class="flex min-h-44 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-center text-sm text-slate-400">বিজ্ঞাপনের ছবি এখানে দেখা যাবে</div>
+              </div>
+            </form>
+          </section>
           <footer class="py-7 text-center text-xs text-slate-400">© ২০২৬ TBM NEWS BD · দায়িত্বশীল সংবাদ প্রকাশে অঙ্গীকারবদ্ধ</footer>
         </main>
       </div>
@@ -259,6 +296,17 @@ const uploadStatus = document.getElementById("uploadStatus");
 const newsList = document.getElementById("newsList");
 const listStatus = document.getElementById("listStatus");
 const newsTotal = document.getElementById("newsTotal");
+const adForm = document.getElementById("adForm");
+const adImageFile = document.getElementById("adImageFile");
+const adImageUrl = document.getElementById("adImageUrl");
+const adTitle = document.getElementById("adTitle");
+const adTargetUrl = document.getElementById("adTargetUrl");
+const adPreview = document.getElementById("adPreview");
+const adFormMessage = document.getElementById("adFormMessage");
+const saveAdButton = document.getElementById("saveAdButton");
+const removeAdButton = document.getElementById("removeAdButton");
+let selectedAdImage = "";
+let selectedAdObjectUrl = "";
 let selectedImage = "";
 let selectedObjectUrl = "";
 let editingNewsId = "";
@@ -268,13 +316,13 @@ let lastActivity = Date.now();
 let lastHeartbeatActivity = 0;
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g, char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);}
 function showMessage(element, message, isError){element.textContent=message; element.className=`notice ${isError?"notice-error":"notice-success"}`;}
-async function requestAdminApi(method, body){
+async function requestAdminApi(method, body, endpoint="/api/admin/news"){
   if(Date.now()-lastActivity>=30*60*1000){
     const message="৩০ মিনিট নিষ্ক্রিয় থাকায় আপনাকে লগআউট করা হয়েছে।";
     await endAdminSession(message);
     throw new Error(message);
   }
-  const response=await fetch("/api/admin/news",{
+  const response=await fetch(endpoint,{
     method,
     headers:body?{"Content-Type":"application/json"}:{},
     credentials:"same-origin",
@@ -413,6 +461,7 @@ async function startAdminSession() {
     }
   }, 60 * 1000);
   await loadNews();
+  await loadAdvertisement();
   return true;
 }
 
@@ -576,6 +625,143 @@ async function loadNews(){
     }).join("")||'<p class="rounded-xl bg-slate-50 p-5 text-center text-sm text-slate-500">এখনো কোনো সংবাদ প্রকাশিত হয়নি।</p>';
   }catch(error){ listStatus.textContent=`লোড করা যায়নি: ${error.message}`; }
 }
+function renderAdPreview(image, title){
+  adPreview.replaceChildren();
+  if(!image){
+    adPreview.className="flex min-h-44 items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-4 text-center text-sm text-slate-400";
+    adPreview.textContent="বিজ্ঞাপনের ছবি এখানে দেখা যাবে";
+    return;
+  }
+  adPreview.className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950";
+  const img=document.createElement("img");
+  img.src=image;
+  img.alt=title||"বিজ্ঞাপনের প্রিভিউ";
+  img.className="h-44 w-full object-contain sm:h-56";
+  adPreview.append(img);
+}
+function clearAdFilePreview(){
+  if(selectedAdObjectUrl) URL.revokeObjectURL(selectedAdObjectUrl);
+  selectedAdObjectUrl="";
+}
+async function loadAdvertisement(){
+  try{
+    const result=await requestAdminApi("GET",undefined,"/api/admin/ads");
+    const ad=result.ad;
+    selectedAdImage=ad?.image||"";
+    adTitle.value=ad?.title||"";
+    adTargetUrl.value=ad?.targetUrl||"";
+    if(selectedAdImage.startsWith("https://")||selectedAdImage.startsWith("http://")) adImageUrl.value=selectedAdImage;
+    else adImageUrl.value="";
+    renderAdPreview(selectedAdImage,adTitle.value);
+    removeAdButton.classList.toggle("hidden",!ad);
+    adFormMessage.classList.add("hidden");
+  }catch(error){
+    console.error("Homepage advertisement could not be loaded.",error);
+    showMessage(adFormMessage,`বিজ্ঞাপন লোড করা যায়নি: ${error.message}`,true);
+    adFormMessage.classList.remove("hidden");
+  }
+}
+adImageFile.addEventListener("change",async()=>{
+  const file=adImageFile.files[0];
+  if(!file) return;
+  if(file.size>500*1024){
+    adImageFile.value="";
+    showMessage(adFormMessage,"ছবির আকার ৫০০ KB-এর বেশি।",true);
+    adFormMessage.classList.remove("hidden");
+    return;
+  }
+  if(!["image/png","image/jpeg","image/webp","image/gif"].includes(file.type)){
+    adImageFile.value="";
+    showMessage(adFormMessage,"PNG, JPEG, WebP অথবা GIF ছবি ব্যবহার করুন।",true);
+    adFormMessage.classList.remove("hidden");
+    return;
+  }
+  try{
+    const image=await new Promise((resolve,reject)=>{
+      const reader=new FileReader();
+      reader.onload=()=>resolve(String(reader.result));
+      reader.onerror=()=>reject(reader.error||new Error("ছবিটি পড়া যায়নি।"));
+      reader.readAsDataURL(file);
+    });
+    clearAdFilePreview();
+    selectedAdImage=image;
+    selectedAdObjectUrl=URL.createObjectURL(file);
+    adImageUrl.value="";
+    renderAdPreview(selectedAdObjectUrl,adTitle.value);
+    adFormMessage.classList.add("hidden");
+  }catch(error){
+    console.error("Advertisement image could not be read.",error);
+    showMessage(adFormMessage,`ছবি পড়া যায়নি: ${error.message}`,true);
+    adFormMessage.classList.remove("hidden");
+  }
+});
+adImageUrl.addEventListener("input",()=>{
+  const value=adImageUrl.value.trim();
+  if(!value) return;
+  try{
+    const url=new URL(value);
+    if(!["http:","https:"].includes(url.protocol)) throw new Error("ছবির লিংক HTTP/HTTPS হতে হবে।");
+    clearAdFilePreview();
+    selectedAdImage=value;
+    adImageFile.value="";
+    renderAdPreview(selectedAdImage,adTitle.value);
+    adFormMessage.classList.add("hidden");
+  }catch(error){
+    selectedAdImage="";
+    renderAdPreview("",adTitle.value);
+    showMessage(adFormMessage,error.message,true);
+    adFormMessage.classList.remove("hidden");
+  }
+});
+adTitle.addEventListener("input",()=>renderAdPreview(selectedAdObjectUrl||selectedAdImage,adTitle.value));
+adForm.addEventListener("submit",async event=>{
+  event.preventDefault();
+  saveAdButton.disabled=true;
+  saveAdButton.textContent="সংরক্ষণ হচ্ছে…";
+  adFormMessage.classList.add("hidden");
+  try{
+    if(!selectedAdImage) throw new Error("বিজ্ঞাপনের ছবি বাছুন অথবা ছবির লিংক দিন।");
+    const result=await requestAdminApi("PUT",{
+      title:adTitle.value.trim(),
+      image:selectedAdImage,
+      targetUrl:adTargetUrl.value.trim()
+    },"/api/admin/ads");
+    selectedAdImage=result.ad.image;
+    clearAdFilePreview();
+    adImageFile.value="";
+    adImageUrl.value=selectedAdImage.startsWith("data:image/")?"":selectedAdImage;
+    renderAdPreview(selectedAdImage,adTitle.value);
+    removeAdButton.classList.remove("hidden");
+    showMessage(adFormMessage,"বিজ্ঞাপন সংরক্ষিত হয়েছে এবং হোমপেজে দেখানো হবে।",false);
+    adFormMessage.classList.remove("hidden");
+  }catch(error){
+    console.error("Homepage advertisement could not be saved.",error);
+    showMessage(adFormMessage,`বিজ্ঞাপন সংরক্ষণ করা যায়নি: ${error.message}`,true);
+    adFormMessage.classList.remove("hidden");
+  }finally{
+    saveAdButton.disabled=false;
+    saveAdButton.textContent="বিজ্ঞাপন সংরক্ষণ করুন";
+  }
+});
+removeAdButton.addEventListener("click",async()=>{
+  if(!confirm("হোমপেজ থেকে বিজ্ঞাপনটি সরাবেন?")) return;
+  removeAdButton.disabled=true;
+  try{
+    await requestAdminApi("DELETE",undefined,"/api/admin/ads");
+    clearAdFilePreview();
+    selectedAdImage="";
+    adForm.reset();
+    renderAdPreview("","");
+    removeAdButton.classList.add("hidden");
+    showMessage(adFormMessage,"বিজ্ঞাপন হোমপেজ থেকে সরানো হয়েছে।",false);
+    adFormMessage.classList.remove("hidden");
+  }catch(error){
+    showMessage(adFormMessage,`বিজ্ঞাপন সরানো যায়নি: ${error.message}`,true);
+    adFormMessage.classList.remove("hidden");
+  }finally{
+    removeAdButton.disabled=false;
+  }
+});
 document.getElementById("addDemoNews").addEventListener("click", async event => {
   const button=event.currentTarget;
   const demos=[

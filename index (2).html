@@ -71,8 +71,6 @@
   </nav>
 
   <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
-    <div id="status" role="status" class="mb-5 hidden rounded-xl border px-4 py-3 text-sm"></div>
-
     <div class="mb-5 flex items-center justify-between gap-3">
       <div>
         <p class="text-xs font-bold uppercase tracking-widest text-rose-700">সত্য ও বস্তুনিষ্ঠ সংবাদ</p>
@@ -123,6 +121,14 @@
     <div id="divisions"></div>
   </main>
 
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="বিজ্ঞাপন">
+    <div class="border-t border-slate-200 py-8">
+      <div id="homepageAdvertisement" class="flex min-h-44 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 p-5 text-center">
+        <div><span class="text-xs font-bold tracking-widest text-slate-400">বিজ্ঞাপন</span><p class="mt-2 text-lg font-bold text-slate-600">আপনার বিজ্ঞাপনের জায়গা</p></div>
+      </div>
+    </div>
+  </section>
+
   <footer class="mt-12 bg-slate-950 text-slate-300">
     <div class="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-3 lg:px-8">
       <div>
@@ -155,7 +161,6 @@
     let neonNews = [];
     let firestoreNews = [];
     let neonNewsLoaded = false;
-    let firestoreNewsLoaded = false;
 
     const firebaseConfig = {
       apiKey: "AIzaSyB_Jr66GoSsKTPVq8bdnYSMsh6W2WPTOfTk",
@@ -173,26 +178,40 @@
       return Number.isFinite(value) ? value : 0;
     }
 
+    function renderAdvertisement(ad) {
+      const container = document.getElementById("homepageAdvertisement");
+      if (!ad || typeof ad.image !== "string" || !ad.image) {
+        container.className = "flex min-h-44 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 p-5 text-center";
+        container.innerHTML = '<div><span class="text-xs font-bold tracking-widest text-slate-400">বিজ্ঞাপন</span><p class="mt-2 text-lg font-bold text-slate-600">আপনার বিজ্ঞাপনের জায়গা</p></div>';
+        return;
+      }
+      const image = imageUrl(ad.image);
+      if (!image) {
+        console.error("Homepage advertisement image URL is invalid.");
+        return;
+      }
+      const content = `<img src="${image}" alt="${escapeHtml(ad.title || "বিজ্ঞাপন")}" class="h-44 w-full bg-slate-950 object-contain sm:h-56">`;
+      container.className = "overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm";
+      container.innerHTML = ad.targetUrl
+        ? `<a href="${escapeHtml(ad.targetUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(ad.title || "বিজ্ঞাপন দেখুন")}">${content}</a>`
+        : content;
+    }
+
+    async function loadAdvertisement() {
+      try {
+        const response = await fetch("/api/ads", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Advertisement API returned HTTP ${response.status}.`);
+        const result = await response.json();
+        renderAdvertisement(result.ad);
+      } catch (error) {
+        console.error("Homepage advertisement could not be loaded.", error);
+      }
+    }
+
     function mergeNewsSources() {
       const byId = new Map(firestoreNews.map(news => [news.id, news]));
       for (const news of neonNews) byId.set(news.id, news);
       return [...byId.values()].sort((a, b) => newsTimestamp(b) - newsTimestamp(a));
-    }
-
-    function updateNewsStatus() {
-      const status = document.getElementById("status");
-      if (!neonNewsLoaded && !firestoreNewsLoaded) {
-        status.textContent = "সংবাদ লোড করা যায়নি। ইন্টারনেট সংযোগ ও ডাটাবেস সেটিং পরীক্ষা করে আবার চেষ্টা করুন।";
-        status.className = "mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800";
-      } else if (!neonNewsLoaded) {
-        status.textContent = "Neon থেকে নতুন সংবাদ আনা যায়নি; Firestore-এর আগের সংবাদ দেখানো হচ্ছে।";
-        status.className = "mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800";
-      } else if (!firestoreNewsLoaded) {
-        status.textContent = "Firestore-এর আগের সংবাদ আনা যায়নি; Neon-এর সংবাদ দেখানো হচ্ছে।";
-        status.className = "mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800";
-      } else {
-        status.classList.add("hidden");
-      }
     }
 
     document.getElementById("date").textContent = new Date().toLocaleDateString("bn-BD", {
@@ -382,7 +401,6 @@
       } catch (error) {
         console.error("News feed could not be loaded.", error);
       }
-      updateNewsStatus();
       if (!neonNewsLoaded) {
         allNews = mergeNewsSources();
         render();
@@ -390,15 +408,14 @@
     }
     loadNews();
     window.setInterval(loadNews, 60000);
+    loadAdvertisement();
+    window.setInterval(loadAdvertisement, 60000);
     db.collection("news").orderBy("timestamp", "desc").onSnapshot(snapshot => {
       firestoreNews = snapshot.docs.map(document => ({ ...document.data(), id: document.id }));
-      firestoreNewsLoaded = true;
       allNews = mergeNewsSources();
       render();
-      updateNewsStatus();
     }, error => {
       console.error("Legacy Firestore news could not be loaded.", error);
-      updateNewsStatus();
     });
   </script>
 </body>

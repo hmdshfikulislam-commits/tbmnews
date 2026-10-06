@@ -15,3 +15,11 @@ CREATE TABLE IF NOT EXISTS news (
 
 CREATE INDEX IF NOT EXISTS news_created_at_desc_idx
   ON news (created_at DESC);
+
+CREATE TABLE IF NOT EXISTS advertisements (
+  id TEXT PRIMARY KEY CHECK (id = 'homepage'),
+  title VARCHAR(180) NOT NULL DEFAULT '',
+  image TEXT NOT NULL,
+  target_url TEXT NOT NULL DEFAULT '',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
