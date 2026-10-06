@@ -1,10 +1,10 @@
 const {
-  getFirestore,
   requireAdminSession,
   requireSameOrigin,
   sendJson
 } = require("../../lib/admin");
-const firebaseAdmin = require("firebase-admin");
+const { getSql } = require("../../lib/db");
+const crypto = require("node:crypto");
 
 class ValidationError extends Error {}
 
@@ -55,8 +55,7 @@ function newsFields(body) {
     upazila,
     isDemo: body.isDemo === true,
     location: [category, district, upazila].filter(Boolean).join(" > "),
-    time: new Date().toLocaleString("bn-BD"),
-    timestamp: firebaseAdmin.firestore.FieldValue.serverTimestamp()
+    time: new Date().toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })
   };
 }
 
@@ -78,27 +77,72 @@ module.exports = async function handler(req, res) {
   if (!requireAdminSession(req, res)) return;
 
   try {
-    const db = getFirestore();
+    const sql = getSql();
     if (req.method === "GET") {
-      const snapshot = await db.collection("news").orderBy("timestamp", "desc").limit(30).get();
+      const rows = await sql`
+        SELECT
+          id,
+          title,
+          description AS "desc",
+          image AS img,
+          category AS cat,
+          division,
+          district,
+          upazila,
+          is_demo AS "isDemo",
+          location,
+          published_time AS time,
+          created_at AS timestamp
+        FROM news
+        ORDER BY created_at DESC, id DESC
+        LIMIT 30
+      `;
       return sendJson(res, 200, {
-        news: snapshot.docs.map(document => ({ ...document.data(), id: document.id }))
+        news: rows
       });
     }
 
     const body = readBody(req);
+    const fields = newsFields(body);
     if (req.method === "POST") {
-      const document = await db.collection("news").add(newsFields(body));
-      return sendJson(res, 201, { id: document.id });
+      const id = crypto.randomUUID();
+      await sql`
+        INSERT INTO news (
+          id, title, description, image, category, division, district, upazila,
+          is_demo, location, published_time
+        ) VALUES (
+          ${id}, ${fields.title}, ${fields.desc}, ${fields.img}, ${fields.cat},
+          ${fields.division}, ${fields.district}, ${fields.upazila},
+          ${fields.isDemo}, ${fields.location}, ${fields.time}
+        )
+      `;
+      return sendJson(res, 201, { id });
     }
     if (req.method === "PATCH") {
       const id = documentId(body.id);
-      await db.collection("news").doc(id).update(newsFields(body));
+      const result = await sql`
+        UPDATE news SET
+          title = ${fields.title},
+          description = ${fields.desc},
+          image = ${fields.img},
+          category = ${fields.cat},
+          division = ${fields.division},
+          district = ${fields.district},
+          upazila = ${fields.upazila},
+          is_demo = ${fields.isDemo},
+          location = ${fields.location},
+          published_time = ${fields.time},
+          created_at = NOW()
+        WHERE id = ${id}
+        RETURNING id
+      `;
+      if (!result.length) return sendJson(res, 404, { error: "সংবাদটি পাওয়া যায়নি।" });
       return sendJson(res, 200, { id });
     }
 
     const id = documentId(body.id);
-    await db.collection("news").doc(id).delete();
+    const result = await sql`DELETE FROM news WHERE id = ${id} RETURNING id`;
+    if (!result.length) return sendJson(res, 404, { error: "সংবাদটি পাওয়া যায়নি।" });
     return sendJson(res, 200, { id });
   } catch (error) {
     if (error instanceof SyntaxError || error instanceof ValidationError) {

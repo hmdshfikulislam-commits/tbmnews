@@ -122,16 +122,25 @@
         </a>
         <p class="text-sm font-bold tracking-wide text-[#087f73]">স্বাগতম</p>
         <h2 class="mt-1 text-3xl font-bold tracking-tight text-[#172b36]">অ্যাডমিনে প্রবেশ</h2>
-        <p class="mt-2 text-sm leading-6 text-slate-500">অনুমোদিত অ্যাডমিনের 2FA কোড দিয়ে প্রবেশ করুন।</p>
+        <p class="mt-2 text-sm leading-6 text-slate-500">অ্যাডমিন পাসওয়ার্ড দিন, তারপর ইমেইলে পাঠানো যাচাইকরণ কোড দিয়ে প্রবেশ করুন।</p>
         <form id="loginForm" class="mt-8 space-y-5">
           <label class="block text-sm font-semibold text-slate-700">অনুমোদিত Gmail
             <input id="email" name="email" type="email" value="hmdshfikulislam@gmail.com" readonly autocomplete="username" class="form-control mt-2">
           </label>
-          <label class="block text-sm font-semibold text-slate-700">৬ সংখ্যার 2FA কোড
-            <input id="totp" name="totp" type="text" required inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" placeholder="Authenticator-এর কোড লিখুন" class="form-control mt-2 tracking-[.35em]">
-            <span class="mt-1 block text-xs font-normal text-slate-500">Google Authenticator বা সমর্থিত অ্যাপে প্রতি ৩০ সেকেন্ডে কোড বদলায়।</span>
+          <label id="passwordField" class="block text-sm font-semibold text-slate-700">অ্যাডমিন পাসওয়ার্ড
+            <input id="adminPassword" name="password" type="password" required maxlength="256" autocomplete="current-password" class="form-control mt-2">
           </label>
-          <button id="loginButton" type="submit" class="primary-button w-full px-4 py-3.5 shadow-lg shadow-emerald-900/10">সাইন ইন করুন <span aria-hidden="true">→</span></button>
+          <label id="verificationCodeField" class="hidden block text-sm font-semibold text-slate-700">ইমেইলে পাঠানো ৬ সংখ্যার কোড
+            <input id="verificationCode" name="code" type="text" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" placeholder="ইমেলে পাওয়া কোড লিখুন" class="form-control mt-2 tracking-[.35em]">
+            <span class="mt-1 block text-xs font-normal text-slate-500">কোডটি ১০ মিনিটের মধ্যে ব্যবহার করুন।</span>
+          </label>
+          <div class="space-y-3">
+            <button id="loginButton" type="submit" class="primary-button w-full px-4 py-3.5 shadow-lg shadow-emerald-900/10">পাসওয়ার্ড যাচাই করুন <span aria-hidden="true">→</span></button>
+            <div id="verificationActions" class="hidden flex flex-wrap justify-between gap-3 text-sm">
+              <button id="changePasswordButton" type="button" class="font-semibold text-slate-500 hover:text-[#087f73]">পাসওয়ার্ড পরিবর্তন</button>
+              <button id="resendCodeButton" type="button" class="font-semibold text-[#087f73] hover:text-emerald-900">কোড আবার পাঠান</button>
+            </div>
+          </div>
         </form>
         <p id="loginError" role="alert" class="notice notice-error mt-4 hidden"></p>
         <a href="../index.html" class="mt-7 inline-flex w-fit items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-[#087f73]"><span aria-hidden="true">←</span> নিউজ পোর্টালে ফিরে যান</a>
@@ -228,7 +237,13 @@ const adminView = document.getElementById("adminView");
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
 const emailInput = document.getElementById("email");
-const totpInput = document.getElementById("totp");
+const passwordInput = document.getElementById("adminPassword");
+const verificationCodeInput = document.getElementById("verificationCode");
+const passwordField = document.getElementById("passwordField");
+const verificationCodeField = document.getElementById("verificationCodeField");
+const verificationActions = document.getElementById("verificationActions");
+const resendCodeButton = document.getElementById("resendCodeButton");
+let loginStep = "password";
 const loginError = document.getElementById("loginError");
 const newsForm = document.getElementById("newsForm");
 const publishButton = document.getElementById("publishButton");
@@ -348,9 +363,21 @@ function showLogin(message = "") {
   sessionHeartbeat = 0;
   adminView.classList.add("hidden");
   loginView.classList.remove("hidden");
+  loginStep = "password";
+  passwordInput.value = "";
+  passwordField.classList.remove("hidden");
+  passwordInput.required = true;
+  verificationCodeField.classList.add("hidden");
+  verificationCodeInput.required = false;
+  verificationCodeInput.value = "";
+  verificationActions.classList.add("hidden");
+  loginButton.innerHTML = 'পাসওয়ার্ড যাচাই করুন <span aria-hidden="true">→</span>';
+  loginError.className = "notice notice-error mt-4";
   if (message) {
     loginError.textContent = message;
     loginError.classList.remove("hidden");
+  } else {
+    loginError.classList.add("hidden");
   }
 }
 
@@ -418,11 +445,11 @@ startAdminSession().catch(error => {
   showLogin(`লগইন সেবা পাওয়া যাচ্ছে না: ${error.message}`);
 });
 
-loginForm.addEventListener("submit", async event => {
-  event.preventDefault();
+async function submitLogin(action) {
   loginError.classList.add("hidden");
   loginButton.disabled = true;
-  loginButton.textContent = "লগইন হচ্ছে…";
+  resendCodeButton.disabled = true;
+  loginButton.textContent = action === "send-code" ? "পাসওয়ার্ড যাচাই হচ্ছে…" : "কোড যাচাই হচ্ছে…";
   try {
     const response = await fetch("/api/admin/login", {
       method: "POST",
@@ -430,21 +457,62 @@ loginForm.addEventListener("submit", async event => {
       credentials: "same-origin",
       body: JSON.stringify({
         email: emailInput.value,
-        totp: totpInput.value
+        action,
+        ...(action === "send-code"
+          ? { password: passwordInput.value }
+          : { code: verificationCodeInput.value })
       })
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "লগইন করা যায়নি।");
-    totpInput.value = "";
+    if (action === "send-code") {
+      loginStep = "code";
+      passwordField.classList.add("hidden");
+      passwordInput.required = false;
+      verificationCodeField.classList.remove("hidden");
+      verificationCodeInput.required = true;
+      verificationActions.classList.remove("hidden");
+      loginError.textContent = "যাচাইকরণ কোড আপনার অনুমোদিত ইমেইলে পাঠানো হয়েছে।";
+      loginError.className = "notice notice-success mt-4";
+      loginError.classList.remove("hidden");
+      loginButton.innerHTML = 'কোড দিয়ে সাইন ইন <span aria-hidden="true">→</span>';
+      verificationCodeInput.focus();
+      return;
+    }
+    passwordInput.value = "";
+    verificationCodeInput.value = "";
     if (!await startAdminSession()) throw new Error("লগইন সেশন তৈরি করা যায়নি।");
   } catch (error) {
-    totpInput.value = "";
+    if (action === "verify-code") verificationCodeInput.value = "";
     loginError.textContent = error.message;
+    loginError.className = "notice notice-error mt-4";
     loginError.classList.remove("hidden");
   } finally {
     loginButton.disabled = false;
-    loginButton.innerHTML = 'সাইন ইন করুন <span aria-hidden="true">→</span>';
+    resendCodeButton.disabled = false;
+    if (loginStep === "password") {
+      loginButton.innerHTML = 'পাসওয়ার্ড যাচাই করুন <span aria-hidden="true">→</span>';
+    } else {
+      loginButton.innerHTML = 'কোড দিয়ে সাইন ইন <span aria-hidden="true">→</span>';
+    }
   }
+}
+loginForm.addEventListener("submit", event => {
+  event.preventDefault();
+  submitLogin(loginStep === "password" ? "send-code" : "verify-code");
+});
+resendCodeButton.addEventListener("click", () => submitLogin("send-code"));
+document.getElementById("changePasswordButton").addEventListener("click", () => {
+  loginStep = "password";
+  passwordField.classList.remove("hidden");
+  passwordInput.required = true;
+  verificationCodeField.classList.add("hidden");
+  verificationCodeInput.required = false;
+  verificationCodeInput.value = "";
+  verificationActions.classList.add("hidden");
+  loginError.classList.add("hidden");
+  loginButton.innerHTML = 'পাসওয়ার্ড যাচাই করুন <span aria-hidden="true">→</span>';
+  passwordInput.focus();
 });
 document.getElementById("logoutButton").addEventListener("click", () => endAdminSession());
 document.getElementById("title").addEventListener("input", updatePreview);
@@ -518,7 +586,7 @@ document.getElementById("addDemoNews").addEventListener("click", async event => 
     ["ডেমো: স্থানীয় ক্রীড়া সংবাদ","এটি কাল্পনিক নমুনা কনটেন্ট। পরে অ্যাডমিন প্যানেল থেকে সহজেই মুছে ফেলতে পারবেন।","ঢাকা"],
     ["ডেমো: পাঠক সচেতনতা","এই ডেমো লেখায় কোনো বাস্তব দাবি নেই। নিজের সংবাদ যোগ করার আগে এটি মুছে দিন।","জাতীয়"]
   ];
-  if(!confirm("৬টি স্পষ্টভাবে চিহ্নিত ডেমো নিউজ Firebase-এ যোগ হবে। পরে এই তালিকা থেকেই মুছতে পারবেন। যোগ করবেন?")) return;
+  if(!confirm("৬টি স্পষ্টভাবে চিহ্নিত ডেমো নিউজ Neon-এ যোগ হবে। পরে এই তালিকা থেকেই মুছতে পারবেন। যোগ করবেন?")) return;
   button.disabled=true;
   let added=0;
   try{

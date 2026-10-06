@@ -1,71 +1,79 @@
 # Admin security deployment
 
-The admin panel uses a Vercel serverless TOTP check and a signed, HttpOnly
-session cookie. The TOTP secret and Firebase service-account key are server-only
-environment variables; neither belongs in the HTML or browser JavaScript.
+The admin panel checks a server-only password, emails a short-lived login code,
+and uses a signed, HttpOnly session cookie. Password, email-provider, session,
+and database credentials are server-only environment variables; none belong in
+HTML or browser JavaScript.
 
 ## Configure Vercel
 
 Add these Production (and Preview, if needed) environment variables in the
 Vercel project settings:
 
-- `TOTP_SECRET`: a random Base32 secret shared with the admin's authenticator
-  app. Configure the app for TOTP, SHA-1, six digits, and a 30-second period.
+- `ADMIN_PASSWORD`: the admin password. Use a unique, strong password and
+  change it by updating this Vercel environment variable.
 - `SESSION_SECRET`: a randomly generated secret with at least 32 bytes.
+- `DATABASE_URL`: the Neon PostgreSQL connection string. Use a pooled connection
+  string and keep it private.
+- `RESEND_API_KEY`: a Resend API key authorized to send login emails.
+- `EMAIL_FROM`: the sender address on a domain verified in Resend, for example
+  `TBM NEWS <admin@your-verified-domain.example>`.
 - `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`: credentials for an
   Upstash Redis database. The shared Redis store enforces the three-failure,
-  15-minute IP lockout across serverless instances.
-- `FIREBASE_SERVICE_ACCOUNT`: the complete JSON for a dedicated Firebase
-  service account with only the Firestore permissions this site needs.
+  15-minute IP lockout and stores one-time login codes across serverless
+  instances.
+
+Before deploying, run [database/schema.sql](./database/schema.sql) in the
+Neon SQL Editor to create the news table and its ordering index. The public
+`/api/news` endpoint reads this table; create, edit, and delete operations use
+the authenticated `/api/admin/news` endpoint.
 
 Generate a session secret in Windows PowerShell:
 `$bytes = New-Object byte[] 48; [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes); [Convert]::ToBase64String($bytes)`.
 
-Generate a Base32 TOTP secret in Windows PowerShell:
-```powershell
-$bytes = New-Object byte[] 20
-[System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
-$alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
-$bits = -join ($bytes | ForEach-Object { [Convert]::ToString($_, 2).PadLeft(8, "0") })
-$chunks = for ($i = 0; $i -lt $bits.Length; $i += 5) {
-  $alphabet[[Convert]::ToInt32($bits.Substring($i, 5), 2)]
-}
-$secret = -join $chunks
-$secret
-```
-Set that value as `TOTP_SECRET` in Vercel and add the same setup key to the
-authenticator app as a time-based entry. Do not put secret values in source
-control, browser code, or chat. Redeploy after changing the Vercel environment
-variables.
+Verify the sender domain in Resend, then set `RESEND_API_KEY` and `EMAIL_FROM`
+in Vercel. The login form first checks `ADMIN_PASSWORD`, sends a six-digit code
+to `hmdshfikulislam@gmail.com`, and accepts that code once for 10 minutes.
+Login attempts are rate-limited to three failures per IP; code resends have a
+one-minute cooldown. Do not put secret values in source control, browser code,
+or chat. Redeploy after changing Vercel environment variables.
 
-## Lock down Firestore
+## Existing Firestore news
 
-Deploy [firestore.rules](./firestore.rules) to the `tbmnews-fdd03` Firebase
-project. These rules keep public news reads working while denying all browser
-writes; the server-side admin API uses the Firebase Admin SDK instead. With the
-Firebase CLI installed, run
-`firebase deploy --only firestore:rules --project tbmnews-fdd03` from this folder.
+Changing the application connection does not delete or copy existing Firestore
+news. Export and import any news you want to keep into Neon before switching
+production traffic. Preserve the existing document IDs in the Neon `id` column
+so saved `?id=...` article links continue to work. Map Firestore fields as
+follows: `desc` to `description`, `img` to `image`, `cat` (or `division`) to
+both `category` and `division`, `isDemo` to `is_demo`, and `time` to
+`published_time`. Use the Firestore document timestamp for `created_at`;
+otherwise the new feed will sort those imported stories by import time.
+Keep the Firestore project intact until you have verified the Neon migration
+and backups.
 
 ## Admin access
 
-Open `/tbm-secret-2024` and enter the current six-digit code from the
-authenticator app. The server only accepts `hmdshfikulislam@gmail.com`; the
-email is an allowlist check, not Google OAuth or proof of Gmail account
-ownership. The TOTP code is the only login credential, rotates every 30
-seconds, and one adjacent time step is accepted to tolerate clock skew. Anyone
-who obtains the authenticator setup key can sign in, so keep it private and
-secure the device that stores it.
+Open `/tbm-secret-2024` and enter the administrator password. The server only
+accepts `hmdshfikulislam@gmail.com`; after the password is accepted, a one-time
+code is sent to that address. The code expires after 10 minutes and can only be
+used once. Anyone with the administrator password and access to that email
+inbox can sign in, so secure both.
 
 The public home page has no admin link. The secret path is only an additional
 layer of obscurity: access control is enforced by the server-side session and
 API checks, not by hiding the URL. An authenticated admin session expires after
 30 minutes without activity.
 
+The home page temporarily merges news from Neon and the existing publicly
+readable Firestore collection. This keeps old stories visible while you migrate
+them; matching IDs are shown once, with Neon values taking precedence. Import
+Firestore stories into Neon to make them available in the admin news list too.
+
 The admin panel's **৬টি ডেমো নিউজ যোগ করুন** button adds clearly labeled sample
-documents to Firestore. They appear in a separate homepage section after the
+rows to Neon. They appear in a separate homepage section after the
 lead story and latest-news panel, not among the real headlines. Edit or remove
 them individually from the published-news list in the admin panel.
 
-Back up any existing Firestore security rules before replacing them. Do not
-deploy the admin API until all required environment variables and the new
-Firestore rules are configured.
+Do not deploy the API until the Neon schema and all required environment
+variables are configured. Keep Firestore and its security rules unchanged while
+you verify the new production database and imported data.

@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: "Hind Siliguri", sans-serif;
@@ -148,6 +148,15 @@
   </footer>
 
   <script>
+    const categories = ["সর্বশেষ", "জাতীয়", "রাজনীতি", "ঢাকা", "চট্টগ্রাম", "বরিশাল", "রাজশাহী", "খুলনা", "সিলেট", "রংপুর", "ময়মনসিংহ"];
+    let allNews = [];
+    let activeCategory = "সর্বশেষ";
+    let searchQuery = "";
+    let neonNews = [];
+    let firestoreNews = [];
+    let neonNewsLoaded = false;
+    let firestoreNewsLoaded = false;
+
     const firebaseConfig = {
       apiKey: "AIzaSyB_Jr66GoSsKTPVq8bdnYSMsh6W2WPTOfTk",
       authDomain: "tbmnews-fdd03.firebaseapp.com",
@@ -155,10 +164,36 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const categories = ["সর্বশেষ", "জাতীয়", "রাজনীতি", "ঢাকা", "চট্টগ্রাম", "বরিশাল", "রাজশাহী", "খুলনা", "সিলেট", "রংপুর", "ময়মনসিংহ"];
-    let allNews = [];
-    let activeCategory = "সর্বশেষ";
-    let searchQuery = "";
+
+    function newsTimestamp(news) {
+      if (news.timestamp && typeof news.timestamp.toMillis === "function") {
+        return news.timestamp.toMillis();
+      }
+      const value = Date.parse(news.timestamp);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function mergeNewsSources() {
+      const byId = new Map(firestoreNews.map(news => [news.id, news]));
+      for (const news of neonNews) byId.set(news.id, news);
+      return [...byId.values()].sort((a, b) => newsTimestamp(b) - newsTimestamp(a));
+    }
+
+    function updateNewsStatus() {
+      const status = document.getElementById("status");
+      if (!neonNewsLoaded && !firestoreNewsLoaded) {
+        status.textContent = "সংবাদ লোড করা যায়নি। ইন্টারনেট সংযোগ ও ডাটাবেস সেটিং পরীক্ষা করে আবার চেষ্টা করুন।";
+        status.className = "mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800";
+      } else if (!neonNewsLoaded) {
+        status.textContent = "Neon থেকে নতুন সংবাদ আনা যায়নি; Firestore-এর আগের সংবাদ দেখানো হচ্ছে।";
+        status.className = "mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800";
+      } else if (!firestoreNewsLoaded) {
+        status.textContent = "Firestore-এর আগের সংবাদ আনা যায়নি; Neon-এর সংবাদ দেখানো হচ্ছে।";
+        status.className = "mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800";
+      } else {
+        status.classList.add("hidden");
+      }
+    }
 
     document.getElementById("date").textContent = new Date().toLocaleDateString("bn-BD", {
       weekday: "long", year: "numeric", month: "long", day: "numeric"
@@ -230,16 +265,20 @@
       const expanded = new URLSearchParams(location.search).get("id") === news.id;
       const locationText = [news.district, news.upazila].filter(Boolean).join(" · ");
       return `<article class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <a href="?id=${encodeURIComponent(news.id)}" class="group relative block h-72 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-rose-950 sm:h-96 lg:h-[30rem]">
+        <div class="border-b border-slate-100 p-5 sm:p-6">
+          <span class="inline-flex rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-800">${escapeHtml(newsCategory(news))}</span>
+          <a href="?id=${encodeURIComponent(news.id)}" class="group mt-3 block">
+            <h2 class="max-w-3xl text-2xl font-bold leading-tight transition group-hover:text-rose-800 sm:text-3xl lg:text-4xl">${escapeHtml(news.title || "শিরোনাম নেই")}</h2>
+          </a>
+          <div class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+            ${news.time ? `<span>প্রকাশিত: ${escapeHtml(news.time)}</span>` : ""}
+            ${locationText ? `<span>স্থান: ${escapeHtml(locationText)}</span>` : "<span>প্রকাশনা: খিলগাঁও, ঢাকা</span>"}
+          </div>
+        </div>
+        <a href="?id=${encodeURIComponent(news.id)}" class="group relative block aspect-video overflow-hidden bg-slate-950">
           <img src="${image || "logo.png"}" alt="${image ? escapeHtml(news.title || "সংবাদের ছবি") : "TBM NEWS 24 BD"}"
-            class="${image ? "absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" : "absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-3 object-contain opacity-90"}"
+            class="${image ? "absolute inset-0 h-full w-full object-contain" : "absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-3 object-contain opacity-90"}"
             onerror="this.onerror=null;this.src='logo.png';this.className='absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-3 object-contain opacity-90'">
-          <span class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent"></span>
-          <span class="absolute bottom-0 left-0 right-0 p-5 text-white sm:p-7">
-            <span class="inline-flex rounded-full bg-rose-700 px-3 py-1 text-xs font-bold">${escapeHtml(newsCategory(news))}</span>
-            <span class="mt-3 block max-w-3xl text-2xl font-bold leading-tight sm:text-3xl lg:text-4xl">${escapeHtml(news.title || "শিরোনাম নেই")}</span>
-            <span class="mt-3 block text-xs text-white/80">${escapeHtml(news.time || "")}${locationText ? ` · ${escapeHtml(locationText)}` : ""}</span>
-          </span>
         </a>
         <div class="p-5 sm:p-6">
           <p class="${expanded ? "whitespace-pre-line" : "line-clamp-3"} text-base leading-7 text-slate-600">${escapeHtml(news.desc || "বিস্তারিত তথ্য পাওয়া যায়নি।")}</p>
@@ -330,15 +369,36 @@
       window.setTimeout(() => { button.textContent = "লিংক কপি"; }, 1800);
     });
 
+    async function loadNews() {
+      try {
+        const response = await fetch("/api/news", { cache: "no-store" });
+        if (!response.ok) throw new Error(`News API returned HTTP ${response.status}.`);
+        const result = await response.json();
+        if (!Array.isArray(result.news)) throw new Error("News API returned an invalid response.");
+        neonNews = result.news;
+        neonNewsLoaded = true;
+        allNews = mergeNewsSources();
+        render();
+      } catch (error) {
+        console.error("News feed could not be loaded.", error);
+      }
+      updateNewsStatus();
+      if (!neonNewsLoaded) {
+        allNews = mergeNewsSources();
+        render();
+      }
+    }
+    loadNews();
+    window.setInterval(loadNews, 60000);
     db.collection("news").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-      allNews = snapshot.docs.map(document => ({ id: document.id, ...document.data() }));
+      firestoreNews = snapshot.docs.map(document => ({ ...document.data(), id: document.id }));
+      firestoreNewsLoaded = true;
+      allNews = mergeNewsSources();
       render();
-      document.getElementById("status").classList.add("hidden");
+      updateNewsStatus();
     }, error => {
-      console.error("News feed could not be loaded.", error);
-      const status = document.getElementById("status");
-      status.textContent = "সংবাদ লোড করা যায়নি। ইন্টারনেট সংযোগ ও Firebase সেটিং পরীক্ষা করে আবার চেষ্টা করুন।";
-      status.className = "mb-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800";
+      console.error("Legacy Firestore news could not be loaded.", error);
+      updateNewsStatus();
     });
   </script>
 </body>

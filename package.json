@@ -4,6 +4,6 @@
     "node": "22.x"
   },
   "dependencies": {
-    "firebase-admin": "^12.7.0"
+    "@neondatabase/serverless": "^1.2.0"
   }
 }
