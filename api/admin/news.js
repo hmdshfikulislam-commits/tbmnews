@@ -82,7 +82,7 @@ module.exports = async function handler(req, res) {
     if (req.method === "GET") {
       const snapshot = await db.collection("news").orderBy("timestamp", "desc").limit(30).get();
       return sendJson(res, 200, {
-        news: snapshot.docs.map(document => ({ id: document.id, ...document.data() }))
+        news: snapshot.docs.map(document => ({ ...document.data(), id: document.id }))
       });
     }
 
