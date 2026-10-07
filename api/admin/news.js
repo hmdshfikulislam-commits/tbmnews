@@ -3,7 +3,7 @@ const {
   requireSameOrigin,
   sendJson
 } = require("../../lib/admin");
-const { getSql } = require("../../lib/db");
+const { getSql, databaseFailure } = require("../../lib/db");
 const crypto = require("node:crypto");
 
 class ValidationError extends Error {}
@@ -148,7 +148,11 @@ module.exports = async function handler(req, res) {
     if (error instanceof SyntaxError || error instanceof ValidationError) {
       return sendJson(res, 400, { error: error.message || "তথ্য সঠিক নয়।" });
     }
-    console.error("Admin news request failed.", error);
-    return sendJson(res, 500, { error: "সংবাদের অনুরোধ সম্পন্ন করা যায়নি।" });
+    const failure = databaseFailure(error);
+    console.error("Admin news request failed.", {
+      code: failure.body.code,
+      databaseErrorCode: error.code || "UNKNOWN"
+    });
+    return sendJson(res, failure.statusCode, failure.body);
   }
 };
