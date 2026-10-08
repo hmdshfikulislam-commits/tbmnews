@@ -277,7 +277,11 @@
       const url = new URL(location.href);
       url.search = "";
       url.hash = "";
-      url.searchParams.set("id", news.id);
+      if (url.protocol === "http:" || url.protocol === "https:") {
+        url.pathname = `/news/${encodeURIComponent(news.id)}`;
+      } else {
+        url.searchParams.set("id", news.id);
+      }
       return url.href;
     }
 

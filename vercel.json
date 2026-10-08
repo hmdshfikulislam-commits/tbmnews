@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/news/:id",
+      "destination": "/api/share?id=:id"
+    },
+    {
       "source": "/tbm-secret-2024",
       "destination": "/tbm-secret-2024/index.html"
     }
