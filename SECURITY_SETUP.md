@@ -52,6 +52,22 @@ otherwise the new feed will sort those imported stories by import time.
 Keep the Firestore project intact until you have verified the Neon migration
 and backups.
 
+The homepage reads legacy news from Firestore without signing in, so the
+Firestore rules allow public reads of `/news` and deny all client-side writes.
+Publishing and editing use the authenticated Neon admin API instead. Firebase
+Storage is not used by the application, so its rules deny all access. Deploy
+these rules from the repository root with:
+
+```powershell
+firebase deploy --only firestore:rules,storage
+```
+
+Deploying the Storage rules will disable any Firebase Storage access for this
+project. Do not deploy them if another application using the same Firebase
+project needs Storage; configure narrowly scoped rules for that application
+first. These rules cannot prevent access through Firebase Admin SDK credentials
+or other privileged server credentials; protect those separately.
+
 ## Admin access
 
 Open `/tbm-secret-2024` and enter the administrator password. The server only
