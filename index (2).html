@@ -9,8 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
@@ -161,14 +159,6 @@
     let neonNews = [];
     let firestoreNews = [];
     let neonNewsLoaded = false;
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB_Jr66GoSsKTPVq8bdnYSMsh6W2WPTOfTk",
-      authDomain: "tbmnews-fdd03.firebaseapp.com",
-      projectId: "tbmnews-fdd03"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
 
     function newsTimestamp(news) {
       if (news.timestamp && typeof news.timestamp.toMillis === "function") {
@@ -442,13 +432,21 @@
     window.setInterval(loadNews, 60000);
     loadAdvertisement();
     window.setInterval(loadAdvertisement, 60000);
-    db.collection("news").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-      firestoreNews = snapshot.docs.map(document => ({ ...document.data(), id: document.id }));
-      allNews = mergeNewsSources();
-      render();
-    }, error => {
-      console.error("Legacy Firestore news could not be loaded.", error);
-    });
+    async function loadLegacyNews() {
+      try {
+        const response = await fetch("/api/legacy-news", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Legacy news API returned HTTP ${response.status}.`);
+        const result = await response.json();
+        if (!Array.isArray(result.news)) throw new Error("Legacy news API returned an invalid response.");
+        firestoreNews = result.news;
+        allNews = mergeNewsSources();
+        render();
+      } catch (error) {
+        console.error("Legacy news could not be loaded.", error);
+      }
+    }
+    loadLegacyNews();
+    window.setInterval(loadLegacyNews, 60000);
   </script>
 </body>
 </html>

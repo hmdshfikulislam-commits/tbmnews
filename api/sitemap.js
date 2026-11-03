@@ -1,8 +1,5 @@
 const { getSql, databaseFailure } = require("../lib/db");
-
-const SITE_URL = "https://tbmnewsbd.com";
-const FIRESTORE_PROJECT_ID = "tbmnews-fdd03";
-const FIREBASE_API_KEY = "AIzaSyB_Jr66GoSsKTPVq8bdnYSMsh6W2WPTOfTk";
+const { getFirestoreNews, getSiteUrl } = require("../lib/firestore");
 const DEMO_TEXT = /^(?:ডেমো|demo|নমুনা|sample|test)\s*:|\b(?:demo|sample|test)\b|ডেমো|নমুনা/i;
 
 function xmlEscape(value) {
@@ -23,76 +20,9 @@ function isoDate(value) {
 
 function isDemoArticle(article) {
   return article.isDemo === true
+    || article.is_demo === true
     || DEMO_TEXT.test(String(article.title || ""))
-    || DEMO_TEXT.test(String(article.description || ""));
-}
-
-function firestoreField(fields, name) {
-  const field = fields && fields[name];
-  if (!field) return undefined;
-  return field.stringValue ?? field.booleanValue ?? field.timestampValue;
-}
-
-function firestoreArticle(document) {
-  const name = document.name;
-  if (typeof name !== "string") {
-    throw new Error("Firestore returned a document without a name.");
-  }
-  const id = decodeURIComponent(name.slice(name.lastIndexOf("/") + 1));
-  const fields = document.fields || {};
-  const dateValue = ["updatedAt", "createdAt", "timestamp"]
-    .map(field => firestoreField(fields, field))
-    .find(Boolean);
-
-  return {
-    id,
-    title: firestoreField(fields, "title"),
-    description: firestoreField(fields, "desc") ?? firestoreField(fields, "description"),
-    isDemo: firestoreField(fields, "isDemo") === true
-      || firestoreField(fields, "is_demo") === true,
-    lastmod: isoDate(dateValue)
-  };
-}
-
-async function getFirestoreArticles() {
-  const articles = [];
-  const seenTokens = new Set();
-  let pageToken;
-
-  do {
-    const url = new URL(
-      `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents/news`
-    );
-    url.searchParams.set("key", FIREBASE_API_KEY);
-    url.searchParams.set("pageSize", "1000");
-    if (pageToken) url.searchParams.set("pageToken", pageToken);
-
-    const response = await fetch(url, {
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(10000)
-    });
-    if (!response.ok) {
-      throw new Error(`Firestore returned HTTP ${response.status}.`);
-    }
-
-    const result = await response.json();
-    if (result.documents !== undefined && !Array.isArray(result.documents)) {
-      throw new Error("Firestore returned an invalid documents list.");
-    }
-    for (const document of result.documents || []) {
-      articles.push(firestoreArticle(document));
-    }
-
-    pageToken = result.nextPageToken || undefined;
-    if (pageToken) {
-      if (seenTokens.has(pageToken)) {
-        throw new Error("Firestore pagination returned a repeated page token.");
-      }
-      seenTokens.add(pageToken);
-    }
-  } while (pageToken);
-
-  return articles;
+    || DEMO_TEXT.test(String(article.description || article.desc || ""));
 }
 
 function renderEntry({ loc, lastmod, changefreq, priority }) {
@@ -116,6 +46,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const sql = getSql();
+    const siteUrl = getSiteUrl();
     const [neonArticles, firestoreArticles] = await Promise.all([
       sql`
         SELECT
@@ -127,15 +58,18 @@ module.exports = async function handler(req, res) {
         FROM news
         ORDER BY created_at DESC, id DESC
       `,
-      getFirestoreArticles()
+      getFirestoreNews()
     ]);
 
     const articlesById = new Map();
     for (const article of [...firestoreArticles, ...neonArticles]) {
       if (!article.id || isDemoArticle(article)) continue;
+      const lastmod = article.createdAt
+        ? isoDate(article.createdAt)
+        : isoDate(article.updatedAt) || isoDate(article.timestamp);
       articlesById.set(String(article.id), {
         id: String(article.id),
-        lastmod: isoDate(article.createdAt) || article.lastmod
+        lastmod
       });
     }
 
@@ -147,13 +81,13 @@ module.exports = async function handler(req, res) {
       .at(-1);
     const urls = [
       renderEntry({
-        loc: `${SITE_URL}/`,
+        loc: `${siteUrl}/`,
         lastmod: latestArticleDate,
         changefreq: "daily",
         priority: "1.0"
       }),
       ...articles.map(article => renderEntry({
-        loc: `${SITE_URL}/news/${encodeURIComponent(article.id)}`,
+        loc: `${siteUrl}/news/${encodeURIComponent(article.id)}`,
         lastmod: article.lastmod,
         changefreq: "hourly",
         priority: "0.8"

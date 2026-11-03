@@ -15,6 +15,11 @@ Vercel project settings:
 - `SESSION_SECRET`: a randomly generated secret with at least 32 bytes.
 - `DATABASE_URL`: the Neon PostgreSQL connection string. Use a pooled connection
   string and keep it private.
+- `FIREBASE_API_KEY`: the Firebase project's API key, used only by server-side
+  Firestore requests.
+- `FIRESTORE_PROJECT_ID`: the Firebase project ID used by server-side Firestore
+  requests.
+- `SITE_URL`: the canonical site origin, for example `https://tbmnewsbd.com`.
 - `RESEND_API_KEY`: a Resend API key authorized to send login emails.
 - `EMAIL_FROM`: the sender address on a domain verified in Resend, for example
   `TBM NEWS <admin@your-verified-domain.example>`.
@@ -52,8 +57,10 @@ otherwise the new feed will sort those imported stories by import time.
 Keep the Firestore project intact until you have verified the Neon migration
 and backups.
 
-The homepage reads legacy news from Firestore without signing in, so the
-Firestore rules allow public reads of `/news` and deny all client-side writes.
+The homepage reads legacy news through the server-side `/api/legacy-news`
+endpoint. Its Firebase API key and project ID are environment variables and
+are not sent to browsers. Firestore rules still allow public reads of `/news`
+and deny all client-side writes; the news content itself is therefore public.
 Publishing and editing use the authenticated Neon admin API instead. Firebase
 Storage is not used by the application, so its rules deny all access. Deploy
 these rules from the repository root with:
